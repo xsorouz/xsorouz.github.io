@@ -3907,3 +3907,121 @@ input, select, textarea {
 			}
 
 		}
+
+
+/* === OVERRIDE PALETTE SOMBRE BLEUTÉE (Hyperspace) === */
+
+/* 0) Police (optionnel, si tu veux le même rendu typographique que la version que tu aimes) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+body, input, select, textarea { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+/* 1) Variables de thème */
+:root{
+  --bg:#0f1220;
+  --fg:#eef0f6;
+  --muted:#aab0c0;
+  --accent:#6dd3ff;
+  --line:#23284a;
+  --card:#151933;
+  --btn:#00b3ff;
+  --btn-t:#00131a;
+}
+
+/* 2) Fond global + texte + liens */
+body { background: var(--bg) !important; color: rgba(255,255,255,.55) !important; }
+a { color: var(--accent) !important; border-bottom-color: rgba(255,255,255,0.25) !important; }
+a:hover { color:#fff !important; border-bottom-color: transparent !important; }
+
+/* 3) Sidebar (fond & séparations) */
+#sidebar { background: #0b0e1a !important; border-right: 1px solid var(--line) !important; }
+#sidebar .inner { color: var(--fg) !important; }
+#sidebar nav a { color: var(--fg) !important; border-bottom-color: rgba(255,255,255,0.12) !important; }
+#sidebar nav a:hover { color:#fff !important; }
+
+/* 4) Wrappers (sections) : teintes homogènes */
+.wrapper.style1     { background-color: transparent !important; }
+.wrapper.style2     { background-color: rgba(21,25,51,0.35) !important; }  /* spotlights */
+.wrapper.style3     { background-color: rgba(21,25,51,0.25) !important; }  /* features */
+.wrapper.style1-alt { background-color: rgba(21,25,51,0.50) !important; }  /* footer */
+
+/* 5) Titres & soulignement signature Hyperspace */
+h1, h2, h3, h4, h5, h6 { color: var(--fg) !important; }
+h1.major:after { background-image: linear-gradient(to right, var(--btn), var(--accent)) !important; }
+
+/* 6) Boutons (primaires, secondaires) */
+.button, input[type="submit"], input[type="reset"], input[type="button"], button {
+  color: var(--fg) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  background: transparent !important;
+}
+.button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover, button:hover {
+  border-color: rgba(255,255,255,0.45) !important;
+}
+.button.primary, input[type="submit"].primary, input[type="reset"].primary, input[type="button"].primary, button.primary {
+  background-color: var(--btn) !important;
+  color: var(--btn-t) !important;
+  border-color: transparent !important;
+}
+
+/* 7) Spotlights : assombrir l’overlay sur les images (sinon l’ancienne teinte violette réapparaît) */
+.spotlights > section > .image:before { background: rgba(0,0,0,0.35) !important; } /* voile assombrissant */
+.spotlights > section:nth-child(2n) > .image:before { background: rgba(0,0,0,0.35) !important; }
+
+/* 8) Cartes/“features” (grille de cases dans la section #two) */
+.features { background: rgba(255,255,255,0.03) !important; border-color: var(--line) !important; }
+.features section { border-top-color: var(--line) !important; }
+.features section:nth-child(2n) { border-left-color: var(--line) !important; }
+.icon.major { background: #ffffff !important; color: var(--btn-t) !important; }
+.features .icon.major:before { color: var(--btn) !important; } /* pictogramme bleu dans le rond */
+
+/* 9) Formulaires */
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"], select, textarea {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: var(--fg) !important;
+}
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="tel"]:focus, select:focus, textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 1px var(--accent) !important;
+}
+select option { color:#fff !important; background: var(--bg) !important; }
+
+/* 10) Détails & séparateurs */
+hr, .box { border-color: rgba(255,255,255,0.18) !important; }
+.box { background: rgba(255,255,255,0.03) !important; }
+ul.alt li { border-top-color: rgba(255,255,255,0.18) !important; }
+blockquote { border-left-color: rgba(255,255,255,0.2) !important; }
+code { background: rgba(255,255,255,0.05) !important; border-color: rgba(255,255,255,0.18) !important; }
+hr.major { border-bottom-color: rgba(255,255,255,0.2) !important; }
+
+
+/* 11) Sous-titre des rôles sous le H1 */
+.subtitle-roles{
+  margin: .1em 0 .35em;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--fg);
+}
+@media (max-width: 980px){
+  .subtitle-roles{ font-size: 1.6rem; }
+}
+
+.hero-flex {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+.hero-photo img {
+  max-width: 220px;
+  border-radius: 50%; /* cercle */
+  border: 3px solid var(--accent); /* contour bleu */
+  box-shadow: 0 0 20px rgba(109,211,255,0.3); /* glow léger */
+}
+.hero-text {
+  flex: 1;
+}
+@media (max-width: 980px) {
+  .hero-flex { flex-direction: column; text-align: center; }
+  .hero-photo img { max-width: 160px; margin-bottom: 1rem; }
+}
