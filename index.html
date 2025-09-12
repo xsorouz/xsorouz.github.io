@@ -186,45 +186,53 @@
       </div>
     </section>
 
-    <!-- ℹ️ À PROPOS — spotlight (image + texte) -->
-    <section id="one" class="wrapper style2 spotlights" aria-labelledby="about">
+    <!-- ℹ️ À PROPOS — spotlight (texte à gauche, image à droite) -->
+    <section id="one" class="wrapper style2 spotlights about" aria-labelledby="about">
       <section>
-        <!-- Image (gauche) : tu peux mettre un visuel abstrait si tu ne veux pas afficher ton visage -->
-        <a class="image">
-          <img
-            src="images/photo-xavier.png"
-            alt="Xavier Rousseau"
-            width="800" height="1000"
-            loading="lazy" decoding="async"
-            data-position="center center"
-          />
-        </a>
-
-        <!-- Contenu (droite) -->
+        <!-- Contenu (gauche) -->
         <div class="content">
           <div class="inner">
             <h2 id="about">À propos</h2>
             <p>
-              Je travaille depuis bientôt <strong>15 ans dans la donnée</strong>, toujours avec le même objectif :
-              transformer l’information brute en décisions fiables et utiles.
+              Je conçois des produits data qui tiennent dans la durée : des pipelines qui tournent, des indicateurs qui éclairent,
+              des règles de gestion qu’on peut expliquer. Mon parcours m’a fait passer par les rôles de
+              <strong>data analyst</strong>, <strong>data scientist</strong>, <strong>référent data</strong> et <strong>chef de projet</strong>,
+              avec un fil rouge : relier clairement les besoins métiers et l’ingénierie.
             </p>
             <p>
-              Au fil de mon parcours, j’ai endossé les rôles de <strong>data analyst</strong>, <strong>data scientist</strong>,
-              <strong>référent data</strong> et <strong>chef de projet</strong>. J’ai conçu des référentiels durables,
-              industrialisé des traitements, construit des modèles pertinents et piloté des projets stratégiques
-              à l’interface des métiers, de l’IT et des directions.
+              Côté perso, je suis un collectionneur-joueur de consoles rétro, amateur de mangas et passionné du Japon.
+              Cette culture pop n’est pas anecdotique : elle nourrit ma curiosité, mon sens du système et mon attention aux détails.
+              Mes années de <strong>judo</strong> ont installé des repères très concrets dans ma pratique :
+              <em>respect</em>, <em>contrôle de soi</em>, <em>rigueur</em>, <em>modestie</em>, <em>courage</em> et <em>progression pas à pas</em>.
+              Ce cadre me pousse à documenter, tester, et chercher le geste juste plutôt que l’esbroufe.
             </p>
             <p>
-              Aujourd’hui, j’élargis cette expertise vers le <strong>data engineering</strong> :
-              conception de pipelines robustes, orchestration, architectures modulaires et monitoring.
-              Cette vision complète — de l’analyse métier à l’ingénierie technique — me permet d’assurer la
-              <strong>fiabilité</strong> et la <strong>valorisation</strong> des données sur toute la chaîne.
+              Professionnellement, j’apporte une vision de bout en bout : collecte, nettoyage, <em>data quality</em>,
+              modélisation utile et restitution adoptée. J’étends aujourd’hui cette approche au <strong>data engineering</strong> :
+              <em>orchestration</em> (Airflow/Kestra/dbt), <em>streaming</em> (Kafka/Redpanda), stockage fiable (PostgreSQL/MinIO),
+              et <em>monitoring</em> (Prometheus/Grafana) — pour que la fiabilité soit <em>conçue</em> dès le départ, pas ajoutée après.
             </p>
-            <p><em>Mon approche : clarifier, fiabiliser, valoriser.</em></p>
+            <p>
+              Mon credo tient en trois verbes : <strong>clarifier</strong> (rendre compréhensible),
+              <strong>fiabiliser</strong> (qualité, règles, traçabilité), <strong>valoriser</strong> (des métriques qui aident à décider).
+              Si vous cherchez un profil curieux, rigoureux et capable d’aligner technique et usage, on va bien s’entendre.
+            </p>
           </div>
+        </div>
+
+        <!-- Image (droite) — décorative -->
+        <div class="image" aria-hidden="true">
+          <img
+            src="images/about.png"
+            alt=""
+            width="800" height="1000"
+            loading="lazy" decoding="async"
+          />
         </div>
       </section>
     </section>
+
+
 
     <!-- 📈 VALEUR / IMPACT — cartes (liste de valeur) -->
     <section id="value" class="wrapper style2" aria-labelledby="value-title">
@@ -308,53 +316,77 @@
         </footer>
       </div>
     </section>
+<!-- 🧰 COMPÉTENCES — cartes (même style que "Valeur") -->
+<section id="skills-section" class="wrapper style2" aria-labelledby="skills-title">
+  <div class="inner value-inner">
+    <header class="value-header">
+      <h2 id="skills-title">Compétences techniques</h2>
+      <p class="lead">Outils &amp; méthodes — de la collecte à la valorisation.</p>
+    </header>
 
-    <!-- 🛠️ COMPÉTENCES — spotlight + features -->
-    <section id="skills-section" class="wrapper style2 spotlights" aria-labelledby="skills">
-      <section>
-        <a class="image">
-          <img
-            src="images/skills.jpg"
-            alt="Compétences techniques"
-            width="1200" height="800"
-            loading="lazy" decoding="async"
-            data-position="25% 25%"
-          />
-        </a>
-        <div class="content">
-          <div class="inner">
-            <h2 id="skills">Compétences techniques</h2>
-            <p class="muted">Outils &amp; méthodes — de la collecte à la valorisation.</p>
-
-            <div class="features">
-              <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
-                <h3>Collecte &amp; pipelines</h3>
-                <p>Python, SQL — Orchestration : Airflow, Kestra, dbt — Ingestion &amp; streaming : Kafka/Redpanda, MinIO</p>
-              </section>
-
-              <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
-                <h3>Analyse &amp; modélisation</h3>
-                <p>Statistiques &amp; économétrie : SAS, R, Python — Prévisions, scores, segmentations — Data cleaning &amp; exploration</p>
-              </section>
-
-              <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-chart-bar"></i></span>
-                <h3>Visualisation &amp; pilotage</h3>
-                <p>Power BI, Tableau, Metabase — Kibana pour le suivi produit &amp; technique</p>
-              </section>
-
-              <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
-                <h3>Qualité &amp; gouvernance</h3>
-                <p>Great Expectations, tests Python/SQL — Documentation &amp; traçabilité — RGPD — Monitoring : Prometheus, Grafana</p>
-              </section>
-            </div>
-          </div>
+    <div class="value-grid" role="list" aria-label="Compétences">
+      <!-- Collecte & pipelines -->
+      <article class="card" role="listitem">
+        <div class="card-head">
+          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
+          <h3>Collecte &amp; pipelines</h3>
         </div>
-      </section>
-    </section>
+        <p>
+          Python, SQL — Orchestration : Airflow, Kestra, dbt —
+          Ingestion &amp; streaming : Kafka/Redpanda, MinIO.
+        </p>
+      </article>
+
+      <!-- Analyse & modélisation -->
+      <article class="card" role="listitem">
+        <div class="card-head">
+          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
+          <h3>Analyse &amp; modélisation</h3>
+        </div>
+        <p>
+          Statistiques &amp; économétrie : SAS, R, Python —
+          Prévisions, scores, segmentations —
+          Data cleaning &amp; exploration.
+        </p>
+      </article>
+
+      <!-- Visualisation & pilotage -->
+      <article class="card" role="listitem">
+        <div class="card-head">
+          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-bar"></i></span>
+          <h3>Visualisation &amp; pilotage</h3>
+        </div>
+        <p>
+          Power BI, Tableau, Metabase —
+          Kibana pour le suivi produit &amp; technique.
+        </p>
+      </article>
+
+      <!-- Qualité & gouvernance -->
+      <article class="card" role="listitem">
+        <div class="card-head">
+          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+          <h3>Qualité &amp; gouvernance</h3>
+        </div>
+        <p>
+          Great Expectations, tests Python/SQL —
+          Documentation &amp; traçabilité — RGPD —
+          Monitoring : Prometheus, Grafana.
+        </p>
+      </article>
+    </div>
+
+    <!-- CTA optionnels (comme dans Valeur) -->
+    <!--
+    <footer class="value-cta">
+      <a href="#projects" class="button outline">Voir mes projets</a>
+      <a href="#contact" class="button primary">Me contacter</a>
+    </footer>
+    -->
+  </div>
+</section>
+
+
 
     <!-- 🧭 EXPÉRIENCES CLÉS — chronologie -->
     <section id="experience" class="wrapper style3 fade-up" aria-labelledby="exp-title">

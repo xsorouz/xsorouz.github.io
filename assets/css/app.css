@@ -614,3 +614,123 @@ ul.icons a i{ font-size: 1.1rem; line-height: 1; }
 @media (max-width: 860px){
   .split.style1{ grid-template-columns: 1fr; }
 }
+
+/* Harmoniser l'entête de la section compétences avec les autres */
+#skills-section .inner > h2{ margin-bottom: .4rem; }
+#skills-section .inner > p.muted{ margin-top: 0; margin-bottom: 1.1rem; }
+ 
+/* ==== À PROPOS : layout, taille image, justification ==== */
+
+/* Colonnes : texte large à gauche, image bornée à droite */
+.spotlights.about > section{
+  display: grid;
+  grid-template-columns: minmax(56ch, 1fr) minmax(280px, 380px);
+  grid-template-areas: "content image";
+  align-items: center;
+  gap: clamp(20px, 3.2vw, 44px);
+}
+
+/* Zones */
+.spotlights.about .content{ grid-area: content; }
+.spotlights.about .image{
+  grid-area: image;
+  max-width: 380px;            /* borne dure pour éviter une image trop grande */
+  justify-self: end;           /* colle l'image à droite */
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;         /* réserve d'espace (CLS=0) */
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-1);
+}
+.spotlights.about .image picture,
+.spotlights.about .image img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;           /* recadrage propre */
+}
+
+/* Paragraphe justifié (spécificité > #one .content .inner p) */
+#one.spotlights.about .content .inner p{
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  line-height: 1.72;           /* on garde ton rythme vertical */
+}
+
+/* Empilement mobile : texte puis image, image pleine largeur de sa colonne */
+@media (max-width: 980px){
+  .spotlights.about > section{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "content"
+      "image";
+  }
+  .spotlights.about .image{
+    max-width: none;           /* plus de borne en mobile */
+    justify-self: stretch;
+  }
+}
+/* ==== À PROPOS : layout, image bornée, texte justifié ==== */
+
+/* Colonnes : texte large à gauche, image bornée à droite */
+.spotlights.about > section{
+  display: grid;
+  grid-template-columns: minmax(56ch, 1fr) minmax(280px, 380px);
+  grid-template-areas: "content image";
+  align-items: center;
+  gap: clamp(20px, 3.2vw, 44px);
+}
+
+/* Zones */
+.spotlights.about .content{ grid-area: content; }
+.spotlights.about .image{
+  grid-area: image;
+  max-width: 380px;        /* borne image */
+  justify-self: end;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;     /* 800×1000 → réserve d’espace (CLS=0) */
+  background: rgba(255,255,255,.02);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-1);
+}
+.spotlights.about .image img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Justification (sur le conteneur + hyphens sur <p>) */
+#one.spotlights.about .content .inner{
+  text-align: justify;
+  text-justify: inter-word;
+}
+#one.spotlights.about .content .inner p{
+  hyphens: auto;
+  line-height: 1.72;
+}
+
+/* Empilement mobile */
+@media (max-width: 980px){
+  .spotlights.about > section{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "content"
+      "image";
+  }
+  .spotlights.about .image{
+    max-width: none;
+    justify-self: stretch;
+  }
+}
+/* Fallback visuel si l'image n'est pas (encore) chargée */
+.spotlights.about .image{
+  background-image:
+    radial-gradient(120% 80% at 100% 0%, rgba(59,130,246,.15), transparent 60%),
+    radial-gradient(80% 60% at 0% 100%, rgba(6,182,212,.10), transparent 50%);
+  background-size: cover;
+  background-position: center;
+}
