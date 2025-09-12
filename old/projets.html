@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Projets — Xavier Rousseau</title>
+  <meta name="description" content="Sélection de projets : contexte, action, résultat. Data analytics, data engineering, visualisation." />
+  <link rel="canonical" href="https://example.com/projets.html">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+</head>
+<body class="is-preload">
+  <!-- Topbar simple : lien retour -->
+  <section id="sidebar" aria-label="Navigation">
+    <div class="inner">
+      <nav>
+        <ul>
+          <li><a href="index.html#projects">← Retour accueil</a></li>
+          <li><a href="methode.html">Méthode</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <main id="wrapper">
+    <section class="wrapper style1 fade-up">
+      <div class="inner">
+        <h1>Projets</h1>
+        <p class="muted">Chaque fiche : contexte → action → résultat (+ stack). Synthétique, orienté impact.</p>
+
+        <!-- Grille de cartes projets -->
+        <div class="features">
+          <section>
+            <span class="icon solid major fa-database" aria-hidden="true"></span>
+            <h3>Référentiel clients unifié</h3>
+            <p><strong>Contexte :</strong> 12 sources CRM/e-commerce.<br>
+               <strong>Action :</strong> matching + dédoublonnage, règles qualité, traçabilité.<br>
+               <strong>Résultat :</strong> +18% de segmentation exploitable.<br>
+               <em>Stack :</em> dbt, Spark, PostgreSQL.
+            </p>
+          </section>
+
+          <section>
+            <span class="icon solid major fa-diagram-project" aria-hidden="true"></span>
+            <h3>Orchestration & monitoring</h3>
+            <p><strong>Contexte :</strong> pipelines quotidiens multi-équipes.<br>
+               <strong>Action :</strong> Airflow/Kestra, tests, métriques Prometheus, alerting.<br>
+               <strong>Résultat :</strong> −60% d’incidents mensuels.<br>
+               <em>Stack :</em> Airflow, Kestra, Prometheus, Grafana, Python.
+            </p>
+          </section>
+
+          <section>
+            <span class="icon solid major fa-chart-line" aria-hidden="true"></span>
+            <h3>Dashboards pilotage</h3>
+            <p><strong>Contexte :</strong> KPIs hétérogènes et non partagés.<br>
+               <strong>Action :</strong> cadrage KPIs, modélisation sémantique, PBI/Tableau.<br>
+               <strong>Résultat :</strong> adoption ↑, décision ↗, temps de préparation ↓.<br>
+               <em>Stack :</em> Power BI, Tableau, SQL, dbt.
+            </p>
+          </section>
+
+          <section>
+            <span class="icon solid major fa-brain" aria-hidden="true"></span>
+            <h3>Scores & prévisions</h3>
+            <p><strong>Contexte :</strong> ciblage marketing peu fiable.<br>
+               <strong>Action :</strong> features simples + modèles explicables + doc.<br>
+               <strong>Résultat :</strong> ROI campagnes ↑, prévisions plus stables.<br>
+               <em>Stack :</em> Python (scikit-learn), FastAPI, Streamlit.
+            </p>
+          </section>
+        </div>
+
+        <ul class="actions">
+          <li><a href="index.html#contact" class="button primary">Parler d’un cas similaire</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer" class="wrapper style1-alt">
+    <div class="inner">
+      <ul class="menu">
+        <li>© Xavier Rousseau</li>
+        <li><a href="index.html">Accueil</a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>

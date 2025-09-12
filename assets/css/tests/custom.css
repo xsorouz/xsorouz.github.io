@@ -1,0 +1,761 @@
+/* ============================================================================
+   Xavier — Thème custom pour Hyperspace
+   ---------------------------------------------------------------------------
+   Architecture CSS :
+     - base.css charge main.css en @layer(base)   (fichiers du thème HTML5 UP)
+     - ce fichier fournit : @layer(reset) + @layer(theme)
+   Objectifs :
+     1) Neutraliser les partis-pris gênants du thème (reset léger)
+     2) Poser des tokens (variables), une échelle typo unifiée et des bases propres
+     3) Stabiliser les layouts (Hero, cartes, sidebar/topbar)
+     4) Harmoniser CTA, formulaires, focus
+     5) Section Compétences en vraies cartes (2 → 3 → 1) + icônes restaurées
+   ========================================================================== */
+
+@layer base, reset, theme;
+
+/* ============================================================================
+   @layer reset — Neutralisations ciblées du thème (minimum vital)
+   ========================================================================== */
+@layer reset {
+
+  /* Spotlights : retirer l’alternance de fonds bleus */
+  .spotlights > section:nth-child(2),
+  .spotlights > section:nth-child(3) {
+    background: transparent;
+  }
+
+  /* Liseré sombre sur les images des spotlights (inutile sur fond sombre) */
+  .spotlights > section > .image:before { opacity: 0; }
+
+  /* Sidebar/wrapper : repartir d’une base neutre,
+     on recadrera la largeur dans @layer theme */
+  #sidebar { width: auto; }
+  #sidebar + #wrapper,
+  #sidebar + #wrapper + #footer { margin-left: 0; }
+
+  /* Base typo un peu plus lisible partout (taille/hauteur de ligne par défaut) */
+  html { font-size: 100%; }
+  body { line-height: 1.6; }
+}
+
+/* ============================================================================
+   @layer theme — Tokens, bases, layout & sections
+   ========================================================================== */
+@layer theme {
+
+  /* ==============================
+     1) TOKENS — variables globales
+     ============================== */
+  :root{
+    /* Couleurs (fond + surfaces) */
+    --bg:            #0f172a;   /* bleu nuit */
+    --surface-1:     #111827;
+    --surface-2:     #0b1221;
+
+    /* Texte */
+    --text:          rgba(241,245,249,0.92);
+    --text-strong:   #ffffff;
+    --text-muted:    rgba(148,163,184,0.96);
+
+    /* Traits */
+    --line:          rgba(148,163,184,0.25);
+
+    /* Marque */
+    --brand:         #3b82f6;  /* bleu */
+    --brand-2:       #22d3ee;  /* cyan */
+
+    /* Dégradé de marque réutilisable */
+    --grad-start:    var(--brand);
+    --grad-end:      var(--brand-2);
+
+    /* Champs / code */
+    --field-bg:      rgba(255,255,255,0.04);
+    --field-border:  rgba(255,255,255,0.18);
+    --code-bg:       rgba(255,255,255,0.05);
+    --code-border:   rgba(255,255,255,0.18);
+
+    /* Focus ring accessible */
+    --focus-ring:    0 0 0 3px rgba(34,211,238,0.35);
+
+    /* ---------- Typographie (échelle unifiée) ---------- */
+
+    /* Corps de texte par défaut */
+    --fs-body: clamp(1.00rem, 0.96rem + 0.30vw, 1.08rem);
+    --lh-body: 1.70;
+
+    /* Texte secondaire/petite annotation */
+    --fs-small: clamp(0.90rem, 0.86rem + 0.25vw, 0.98rem);
+
+    /* Sous-titre / h4 */
+    --fs-h4: clamp(1.10rem, 0.98rem + 0.60vw, 1.40rem);
+
+    /* Titre section / h3 */
+    --fs-h3: clamp(1.30rem, 1.02rem + 1.10vw, 1.85rem);
+
+    /* Gros titre section / h2 */
+    --fs-h2: clamp(1.60rem, 1.10rem + 2.20vw, 2.40rem);
+
+    /* Titre de page / h1 (hors Hero) */
+    --fs-h1: clamp(2.00rem, 1.30rem + 3.10vw, 3.00rem);
+
+    /* Titre Hero (très grand) */
+    --fs-hero: clamp(2.60rem, 2.10rem + 4.00vw, 4.00rem);
+
+    /* ---------- Layout / espacements ---------- */
+    --container-max: 1360px;
+    --gutter-x:      2.25rem;
+    --sidebar-w:     clamp(13rem, 18vw, 18rem);
+    --topbar-h:      3.5em;
+    --br-card:       16px;
+
+    /* Espacements utilitaires */
+    --space-1: .25rem;
+    --space-2: .5rem;
+    --space-3: .75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+  }
+
+  /* ==============================
+     2) BASE GLOBALE (typo + couleurs)
+     ============================== */
+  html, body { overflow-x: hidden; } /* anti-scroll horizontal (halo/marges) */
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Titres (échelle unifiée) */
+  h1, h2, h3, h4, h5, h6 { color: var(--text-strong); margin: 0 0 .6em 0; }
+  h1 { font-size: var(--fs-h1); line-height: 1.12; }
+  h2 { font-size: var(--fs-h2); line-height: 1.18; }
+  h3 { font-size: var(--fs-h3); line-height: 1.22; }
+  h4 { font-size: var(--fs-h4); line-height: 1.28; }
+  h5, h6 { font-size: var(--fs-h4); line-height: 1.3; opacity: .95; }
+
+  /* Corps, listes, petits textes */
+  p, ul, ol, dl { font-size: var(--fs-body); line-height: var(--lh-body); }
+  small, .small { font-size: var(--fs-small); opacity: .9; }
+
+  /* Liens : bleu → cyan, soulignement discret via border-bottom */
+  a {
+    color: var(--brand);
+    border-bottom: 1px solid rgba(255,255,255,0.25);
+    text-decoration: none;
+  }
+  a:hover, a:focus { color: var(--brand-2); border-bottom-color: transparent; }
+
+  strong, b { color: var(--text-strong); }
+  header p, .muted { color: var(--text-muted); }
+
+  /* Séparateurs / citations / code */
+  hr { border-bottom-color: var(--line); }
+  blockquote { border-left-color: var(--line); }
+  code, pre code { background: var(--code-bg); border-color: var(--code-border); }
+
+  /* Tables / listes (teinte cohérente) */
+  .box{ border-color: var(--line); }
+  .table-wrapper table tbody tr{ border-color: var(--line); }
+  table tbody tr:nth-child(2n+1){ background-color: rgba(255,255,255,0.04); }
+  table thead{ border-bottom-color: var(--line); }
+  table tfoot{ border-top-color: var(--line); }
+  ul.alt li{ border-top-color: var(--line); }
+
+  /* ==============================
+     3) BOUTONS & FORMULAIRES
+     ============================== */
+
+  /* Boutons — base commune */
+  .button,
+  button,
+  input[type="submit"], input[type="reset"], input[type="button"]{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: .45rem;
+    min-height: 48px;
+    padding-inline: 1.15rem;
+    border-radius: 999px;
+    white-space: normal;
+    line-height: 1.25;
+    border-color: var(--field-border);
+    color: var(--text-strong);
+    transition: filter .2s ease, box-shadow .2s ease, transform .15s ease, border-color .2s ease;
+  }
+  .button:hover,
+  button:hover,
+  input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover{
+    border-color: rgba(255,255,255,0.55);
+  }
+  .button:active:hover,
+  button:active:hover,
+  input[type="submit"]:active:hover, input[type="reset"]:active:hover, input[type="button"]:active:hover{
+    border-color: #ffffff;
+  }
+
+  /* Variante CTA “confort” pour le hero */
+  .cta-lg{
+    padding: .9rem 1.25rem;
+    min-height: 52px;
+    font-weight: 700;
+    letter-spacing: .02em;
+  }
+
+  /* Primaire : dégradé marque */
+  .button.primary,
+  button.primary,
+  input[type="submit"].primary, input[type="button"].primary, input[type="reset"].primary{
+    background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 10px 25px rgba(0,0,0,.25);
+  }
+  .button.primary:hover,
+  button.primary:hover,
+  input[type="submit"].primary:hover,
+  input[type="button"].primary:hover,
+  input[type="reset"].primary:hover{
+    filter: brightness(1.05);
+  }
+  .button.primary:active,
+  button.primary:active,
+  input[type="submit"].primary:active,
+  input[type="button"].primary:active,
+  input[type="reset"].primary:active{
+    filter: brightness(0.94);
+    transform: translateY(1px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.30), inset 0 2px 4px rgba(0,0,0,.20);
+  }
+
+  /* Secondaire : outline élégant */
+  .button.outline{
+    background: transparent;
+    color: var(--text-strong);
+    border: 1px solid rgba(255,255,255,.28);
+    box-shadow: none;
+  }
+  .button.outline:hover{
+    background: rgba(255,255,255,.06);
+    border-color: rgba(255,255,255,.48);
+  }
+  .button.outline:active{
+    background: rgba(255,255,255,.10);
+    transform: translateY(1px);
+  }
+
+  /* Tertiaire : ghost discret */
+  .button.ghost{
+    background: transparent;
+    color: var(--text-strong);
+    border: 1px dashed rgba(255,255,255,.28);
+    box-shadow: none;
+  }
+  .button.ghost:hover{
+    border-style: solid;
+    border-color: rgba(255,255,255,.42);
+    background: rgba(255,255,255,.04);
+  }
+  .button.ghost:active{
+    background: rgba(255,255,255,.08);
+    transform: translateY(1px);
+  }
+
+  /* Focus visible (clavier) */
+  a:focus-visible, .button:focus-visible, input:focus-visible,
+  select:focus-visible, textarea:focus-visible{
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* Formulaires */
+  label{ color: var(--text-strong); }
+  input[type="text"], input[type="password"], input[type="email"], input[type="tel"],
+  select, textarea{
+    background: var(--field-bg);
+    border-color: var(--field-border);
+    color: var(--text);
+  }
+  input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.35); }
+  input:focus, select:focus, textarea:focus{
+    border-color: #ffffff;
+    box-shadow: var(--focus-ring);
+    outline: none;
+  }
+  select option{ background: var(--bg); color: var(--text-strong); }
+  input[type="checkbox"]:checked + label:before,
+  input[type="radio"]:checked + label:before{
+    background: #ffffff; border-color: #ffffff; color: var(--brand);
+  }
+
+  /* ==============================
+     4) WRAPPERS & TITRES
+     ============================== */
+  .wrapper.alt{        background-color: #0d1426; }
+  .wrapper.style1{     background-color: #12203a; }
+  .wrapper.style1-alt{ background-color: #0f1a30; }
+  .wrapper.style2{     background-color: #132a52; }
+  .wrapper.style2-alt{ background-color: #0f2346; }
+  .wrapper.style3{     background-color: #0b1e35; }
+  .wrapper.style3-alt{ background-color: #0a1a2d; }
+
+  /* Soulignement décoratif des gros titres (.major) */
+  h1.major:after{
+    background-image: linear-gradient(to right, var(--grad-start), var(--grad-end));
+  }
+
+  /* ==============================
+     5) NAVIGATION (sidebar / topbar)
+     ============================== */
+  #sidebar{
+    background: var(--bg);
+    width: var(--sidebar-w);
+    padding: 1.5rem 1rem;
+  }
+  #sidebar nav a{
+    color: rgba(255,255,255,0.45);
+    font-size: clamp(.85rem, .9vw, 1rem);
+    padding: .4rem 0;
+    letter-spacing: .05em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
+  }
+  #sidebar nav a:hover{ color: rgba(255,255,255,0.75); }
+  #sidebar nav a.active{ color: var(--text-strong); }
+  #sidebar nav a:before{ background: rgba(255,255,255,0.08); height: 1px; }
+  #sidebar nav a:after{ background-image: linear-gradient(to right, var(--grad-start), var(--grad-end)); }
+
+  /* Décalage du contenu = largeur exacte de la sidebar */
+  #sidebar + #wrapper,
+  #sidebar + #wrapper + #footer{
+    margin-left: var(--sidebar-w);
+  }
+
+  /* Ajustements progressifs de largeur */
+  @media (max-width: 1400px){ :root{ --sidebar-w: clamp(12rem, 20vw, 16rem); } }
+  @media (max-width: 1200px){ :root{ --sidebar-w: clamp(11rem, 22vw, 15rem); } }
+
+  /* Bascule topbar (≤1280px) */
+  @media (max-width: 1280px){
+    #sidebar{ width: 100%; padding: 2rem 1.2rem; }
+    #sidebar + #wrapper,
+    #sidebar + #wrapper + #footer{
+      margin-left: 0;
+      padding-top: var(--topbar-h);
+    }
+    #sidebar nav a{ white-space: normal; overflow: visible; text-overflow: clip; }
+  }
+
+  /* ==============================
+     6) HERO (intro) — stable & lisible
+     ============================== */
+  #intro{ background-image: none; background-color: transparent; }
+  #intro p{ font-size: var(--fs-body); line-height: var(--lh-body); }
+
+  #intro.hero .hero-inner{
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 6rem var(--gutter-x) 3.75rem;
+    display: grid;
+    grid-template-areas: "copy photo";
+    grid-template-columns: minmax(520px,1fr) minmax(300px,420px);
+    gap: clamp(1rem, 2vw, 2.25rem);
+    align-items: start;
+  }
+  #intro .hero-col{ min-width: 0; }
+
+  #intro .hero-col--text{ grid-area: copy; justify-self: start; max-width: 68ch; }
+  #intro .hero-title{
+    font-size: var(--fs-hero);
+    line-height: 1.08;
+    margin: 0 0 .65rem 0;
+  }
+  #intro .hero-role{
+    font-size: clamp(1.02rem, 1.1vw, 1.18rem);
+    opacity: .9;
+    margin: 0 0 1rem 0;
+  }
+  #intro .hl{ font-weight: 700; }
+
+  /* Chips statut */
+  #intro .hero-status{
+    display: flex; align-items: center; flex-wrap: nowrap;
+    gap: .85rem 1.1rem; margin: 1.2rem 0 1.4rem 0; padding: 0; list-style: none;
+  }
+  #intro .hero-status li{
+    display: inline-flex; align-items: center; gap: .55rem; padding: .55rem 1.05rem;
+    border-radius: 999px; background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: var(--text-strong); font-weight: 600; font-size: 1.02rem; letter-spacing: .2px; white-space: nowrap;
+    transition: background .25s ease, border-color .25s ease, transform .18s ease;
+  }
+  #intro .hero-status li:hover{
+    background: var(--brand); color: #0f172a; border-color: var(--brand-2); transform: translateY(-1px);
+  }
+  #intro .hero-status .status-ico{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.6rem; height: 1.6rem; border-radius: 50%;
+    background: rgba(255,255,255,0.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+    font-size: .95rem; line-height: 1;
+  }
+  #intro .hero-status li:nth-child(1) .status-ico{ color:#facc15; } /* ⚡ */
+  #intro .hero-status li:nth-child(2) .status-ico{ color:#ef4444; } /* 💼 */
+  #intro .hero-status li:nth-child(3) .status-ico{ color:#22d3ee; } /* 🌍 */
+
+  /* Bullets */
+  #intro .hero-bullets{
+    list-style:none; padding:0; margin:.95rem 0 1.85rem 0; display:grid; gap:.75rem;
+  }
+  #intro .hero-bullets li{
+    display:flex; align-items:flex-start; gap:.65rem;
+    font-size:var(--fs-body); line-height:var(--lh-body);
+  }
+  #intro .hero-bullets strong{ white-space:nowrap; }
+
+  /* CTAs */
+  #intro .hero-actions{ display:flex; gap:1.1rem; flex-wrap:nowrap; margin-top:.6rem; }
+  #intro .hero-actions .button{ white-space: normal; line-height: 1.25; }
+
+  /* Visuel */
+  #intro .hero-col--visual{ grid-area: photo; position: relative; min-height: 340px; margin-left: -12px; }
+  #intro .portrait{
+    position:relative;
+    width:clamp(240px, 24vw, 340px);
+    height:clamp(240px, 24vw, 340px);
+    margin-left:auto; border-radius:999px; overflow:hidden;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.38), 0 0 0 6px rgba(255,255,255,0.04) inset;
+    z-index:2;
+  }
+  #intro .portrait img{ width:100%; height:100%; object-fit:cover; }
+
+  /* Halo décoratif */
+  #intro .hero-blob{
+    position:absolute; right:-6%; top:-6%;
+    width:clamp(300px,45vw,540px); height:clamp(300px,45vw,540px);
+    filter:blur(28px);
+    background:
+      radial-gradient(60% 60% at 60% 40%, #4aa8ff55, transparent 70%),
+      radial-gradient(60% 60% at 30% 70%, #9c6bff40, transparent 70%);
+    border-radius:50%; z-index:1; pointer-events:none;
+    animation: blobFloat 12s ease-in-out infinite alternate;
+    max-width: 95vw; max-height: 95vw;
+  }
+  @keyframes blobFloat{
+    from{ transform:translateY(0) translateX(0) scale(1); }
+    to{   transform:translateY(-10px) translateX(8px) scale(1.03); }
+  }
+  @media (prefers-reduced-motion: reduce){ #intro .hero-blob{ animation:none; } }
+
+  /* Responsive Hero */
+  @media (min-width:1101px) and (max-width:1360px){
+    #intro.hero .hero-inner{
+      grid-template-columns: minmax(480px,1fr) minmax(280px,380px);
+    }
+    #intro .hero-col--visual{ margin-left: -8px; }
+  }
+  @media (max-width:1100px){
+    #intro.hero .hero-inner{
+      grid-template-areas:
+        "copy"
+        "photo";
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+    #intro .hero-col--text{ max-width:68ch; }
+    #intro .hero-col--visual{ margin-left: 0; }
+    #intro .portrait{ margin:0 auto; }
+    #intro .hero-blob{ left:50%; transform:translateX(-50%); right:auto; }
+  }
+  @media (max-width:880px){
+    #intro .hero-status{ flex-wrap:wrap; }
+    #intro .hero-actions{ flex-wrap:wrap; }
+  }
+
+/* ==============================
+   7) À PROPOS (spotlights)
+   Objectif :
+   - Gabarit en grille : [ image | texte ]
+   - Le "bloc de lecture" (content .inner) est CENTRÉ HORIZONTALEMENT
+   - Le texte à l’intérieur reste JUSTIFIÉ
+   - Patch pour empêcher l’image de passer en position:absolute (thème)
+   - Responsive : pile image → texte en mobile
+   ============================== */
+
+
+/* 1) Grille 2 colonnes (image | texte) */
+  #one.spotlights > section{
+    display: grid;
+    grid-template-columns: clamp(14rem, 22vw, 19rem) 1fr;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    align-items: start; /* passer à center pour centrer verticalement le texte */
+  }
+
+  /* 2) Colonne image */
+  #one .image{
+    width: auto;
+    display: block;
+    position: relative;
+    align-self: start;
+    justify-self: center;
+
+    /* PATCH contre le JS du thème : supprime le background et le masque décoratif */
+    background: none !important;
+  }
+  #one .image::before{ opacity: 0 !important; }
+
+  /* 2bis) L’image <img> doit être VISIBLE (le thème la met souvent display:none) */
+  #one .image img{
+    display: block !important;         /* ← clé pour réactiver l’image */
+    position: static !important;       /* annule des positionnements du thème */
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    width: 100%;
+    max-width: clamp(220px, 24vw, 320px);
+    height: auto;
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+    margin: 0 auto;
+  }
+
+  /* 3) Colonne texte */
+  #one .content{
+    width: 100%;
+    padding: 0;
+  }
+
+  /* Bloc de lecture CENTRÉ (horizontalement) */
+  #one .content .inner{
+    max-width: 68ch;
+    margin-inline: auto;  /* centre le bloc */
+    text-align: left;     /* titres/éléments par défaut à gauche */
+  }
+
+  /* Corps du texte JUSTIFIÉ */
+  #one #about + p,
+  #one #about + p ~ p{
+    font-size: var(--fs-body, var(--copy-size));
+    line-height: var(--lh-body, var(--copy-line));
+    color: var(--text);
+    text-align: justify;
+    hyphens: auto;
+    text-wrap: balance;
+    margin: 0 0 .9rem 0;
+  }
+  #one .content .inner em{
+    display: inline-block;
+    margin-top: .5rem;
+  }
+
+  /* 4) Responsive : pile image → texte */
+  @media (max-width: 980px){
+    #one.spotlights > section{
+      grid-template-columns: 1fr;
+    }
+    #one .image{
+      justify-self: center;
+    }
+    #one .content .inner{
+      max-width: 70ch;
+      padding: 0 1rem;
+    }
+  }
+
+
+  /* ==============================
+     8) VALEUR (grille de cartes)
+     ============================== */
+  #value.wrapper.style2{
+    background: linear-gradient(135deg, #12203a 0%, #1a3661 100%);
+  }
+  #value .value-inner{
+    max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 3rem 2rem;
+  }
+  #value .value-header{ text-align:center; margin-bottom:2.25rem; }
+  #value .value-header h2{ margin:0 0 .6rem 0; }
+  #value .value-header .lead{
+    font-size: calc(var(--fs-body)*1.10);
+    line-height: var(--lh-body);
+    opacity: .85;
+  }
+
+  /* Grille 3 → 2 → 1 */
+  #value .value-grid{
+    display:grid; grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:1.75rem; align-items:stretch;
+  }
+  @media (max-width:1180px){
+    #value .value-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:1.5rem; }
+  }
+  @media (max-width:760px){
+    #value .value-inner{ padding:3rem 1.2rem 2.5rem 1.2rem; }
+    #value .value-grid{ grid-template-columns:1fr; gap:1.2rem; }
+  }
+
+  /* Cartes */
+  #value .card{
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--br-card);
+    padding: 1.5rem 1.4rem;
+    position:relative; overflow:hidden; height:100%;
+    display:flex; flex-direction:column; gap:.9rem;
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+  }
+  #value .card::before{
+    content:""; position:absolute; inset:0; border-radius:var(--br-card); padding:1px;
+    background: linear-gradient(135deg, #49a5ff33, #9a66ff33);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events:none;
+  }
+  #value .card:hover{
+    transform: translateY(-6px);
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.30);
+  }
+  #value .card-head{
+    display:flex; flex-direction:column; align-items:center; gap:.8rem; margin-bottom:.2rem;
+  }
+  #value .icon-badge{
+    display:inline-grid; place-items:center; width:56px; height:56px; border-radius:50%;
+    background: rgba(255,255,255,0.07); color:#69b7ff; font-size:1.35rem;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+  }
+  #value .card h3{ text-align:center; margin:0; line-height:1.35; font-size:var(--fs-h4); }
+  #value .card p{
+    font-size: var(--fs-body); line-height: var(--lh-body);
+    text-align: justify; margin:0; opacity:.95;
+    hyphens: auto; text-wrap: balance;
+  }
+
+  /* CTA Valeur */
+  #value .value-cta{
+    display:flex; flex-wrap:wrap; gap:.9rem 1rem; justify-content:center; align-items:stretch; margin-top:2rem;
+  }
+  #value .value-cta .button{
+    white-space: normal; line-height:1.25; padding:.9rem 1.2rem; min-height:48px; max-width:100%;
+  }
+  @media (max-width:760px){
+    #value .value-cta .button{ flex:1 1 100%; font-size:.98rem; }
+  }
+
+  /* ==============================
+     9) GARDE-FOU TYPO GLOBAL (fallback)
+     ============================== */
+  .wrapper p, .features section p{
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+  }
+
+  /* =========================================================
+     10) SKILLS — Section "Compétences"
+     - On neutralise le layout "spotlights" uniquement ici
+     - Grille 2 colonnes (rendu 2×2 cohérent), 3 colonnes en très grand écran
+     - Icônes restaurées (on ne touche PAS au ::before qui porte FA)
+     ========================================================= */
+
+  /* Désactivation du gabarit spotlight */
+  #skills-section.spotlights > section{
+    display: block;
+    padding: 0;
+  }
+  #skills-section .image{ display: none; }
+
+  /* Plateau centré et confortable */
+  #skills-section .content .inner{
+    max-width: 1200px;
+    padding: 0 1.25rem;
+    margin: 0 auto;
+  }
+
+  /* Grille — 2 colonnes par défaut */
+  #skills-section .features{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(420px, 1fr));
+    gap: 1.35rem;
+    align-items: stretch;
+
+    /* purge de la déco héritée */
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative;
+  }
+
+  /* 3 colonnes seulement sur écrans très larges */
+  @media (min-width: 1600px){
+    #skills-section .content .inner{ max-width: 1400px; }
+    #skills-section .features{
+      grid-template-columns: repeat(3, minmax(360px, 1fr));
+    }
+  }
+
+  /* 1 colonne en mobile */
+  @media (max-width: 980px){
+    #skills-section .features{ grid-template-columns: 1fr; }
+  }
+
+  /* Cartes */
+  #skills-section .features > section{
+    width: auto !important;   /* annule width calc() du thème */
+    margin: 0 !important;
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--br-card);
+    padding: 1.25rem 1.25rem 1.15rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.25);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  }
+  #skills-section .features > section:hover{
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.30);
+  }
+
+  /* Icônes : on conserve ::before (pictogramme FA), on supprime juste le halo */
+  #skills-section .features .icon.major{ position: relative; }
+  #skills-section .features .icon.major::after{ content:none !important; }
+
+  /* Badge rond cohérent avec “Valeur” */
+  #skills-section .features .icon{
+    display: inline-grid;
+    place-items: center;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    color: #69b7ff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    margin-bottom: .75rem;
+    font-size: 1.15rem; /* taille du pictogramme */
+    line-height: 1;
+  }
+
+  /* Typo des cartes */
+  #skills-section .features h3{
+    margin: .15rem 0 .35rem;
+    line-height: 1.25;
+    font-size: var(--fs-h4);
+    text-wrap: balance;
+  }
+  #skills-section .features p{
+    margin: 0;
+    font-size: var(--fs-body);
+    line-height: var(--lh-body);
+    text-wrap: pretty;
+    hyphens: manual;
+    overflow-wrap: break-word;
+  }
+}
+/* ============================ FIN DU FICHIER ============================ */

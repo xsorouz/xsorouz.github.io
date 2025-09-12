@@ -1,54 +1,41 @@
 <!DOCTYPE HTML>
 <!--
-  Portfolio — structure claire, FR, accessible, prête pour GitHub Pages.
-  Cette version est "pédagogique" : beaucoup de commentaires pour modifier vite sans se perdre.
-
-  🧭 Plan rapide
-  - <head> : SEO, Open Graph, Twitter, JSON-LD (schéma Person + WebSite via @graph), CSS & icônes
-  - <body> : skip-link, sidebar (nav), main (sections : hero, about, value, skills, experience, projects, education, contact), footer
-  - <script> : libs Hyperspace (si utilisées) + petit script d'auto-highlight du lien actif
-
-  ⚠️ Note importante (ancre/scroll) :
-  Dans la nav, certains liens pointent vers des <h2 id="..."> (ex. #about) et non vers la section
-  englobante. C’est OK, mais le CSS `section[id]{ scroll-margin-top: ... }` ne s’applique alors pas.
-  → Solutions simples (choisis UNE option) :
-     1) (RECO) Mettre l’id sur la <section> elle-même (ex. <section id="about"> ... <h2 id="about-title">)
-     2) Ajouter en CSS : `:is(section,h1,h2,h3)[id]{ scroll-margin-top: calc(var(--topbar-h) + 12px); }`
-     3) Laisser tel quel si le décalage au scroll ne te gêne pas.
+  Portfolio — basé sur Hyperspace (HTML5 UP)
+  Structure claire, FR, accessible, facile à modifier.
+  NOTE :
+  - Le style custom est centralisé dans assets/css/custom.css
+  - Ce fichier pose la structure HTML + accessibilité/SEO de base
 -->
 <html lang="fr">
 <head>
-  <!-- 📌 Métadonnées de base (toujours en tête) -->
+  <!-- Métadonnées de base -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Xavier Rousseau — Data Analyst • Data Science & Engineering</title>
   <meta name="description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Conception de solutions data de bout en bout : collecte, fiabilité, gouvernance, décision. Disponible immédiatement — CDI Brest / Remote (France)." />
   <meta name="robots" content="index,follow">
-  <meta name="theme-color" content="#0f172a"> <!-- Couleur d’UI (barre mobile) → cohérente avec --bg -->
-  <meta name="color-scheme" content="dark only"> <!-- Déclare un thème sombre par défaut -->
-  <link rel="canonical" href="https://xsorouz.github.io/">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="color-scheme" content="dark only">
+  <link rel="canonical" href="https://example.com/"><!-- mets l’URL finale du site -->
 
-  <!-- 🪪 Open Graph / partage social (Facebook, LinkedIn…) -->
+  <!-- Open Graph / partage social -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Xavier Rousseau">
   <meta property="og:title" content="Xavier Rousseau — Data Analyst • Data Science & Engineering">
   <meta property="og:description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Solutions data de bout en bout. Disponible immédiatement — CDI Brest / Remote (France).">
-  <meta property="og:url" content="https://xsorouz.github.io/">
-  <!-- Astuce GitHub Pages : assure-toi que l’image existe à ce chemin ou mets une URL absolue différente -->
-  <meta property="og:image" content="https://xsorouz.github.io/images/og-cover.jpg">
+  <meta property="og:image" content="images/og-cover.jpg">
   <meta property="og:locale" content="fr_FR">
 
-  <!-- 🐦 Twitter Card (utile pour les aperçus) -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Xavier Rousseau — Data Analyst • Data Science & Engineering">
-  <meta name="twitter:description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Solutions data de bout en bout.">
-  <meta name="twitter:image" content="https://xsorouz.github.io/images/og-cover.jpg">
-
-  <!-- 🎨 CSS principal -->
-  <link rel="stylesheet" href="assets/css/app.css">
-
-  <!-- 🔣 Icônes (Font Awesome 6) — préconnexion pour gagner un RTT + CORS corrects
-       Conseil : ajoute l’attribut `integrity` quand tu fixes précisément la version pour la sécurité SRI. -->
+  <!-- =========================================================
+       CSS — ordre important :
+       1) base.css charge main.css en @layer(base) (thème)
+       2) custom.css (reset + theme) prend la main
+       ========================================================= -->
+  <!--
+    <link rel="stylesheet" href="assets/css/base.css">
+   <link rel="stylesheet" href="assets/css/custom.css">
+  -->
+   <link rel="stylesheet" href="assets/css/app.css">
+  <!-- Icônes (Font Awesome) — pré-connexion + CORS corrects -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link
     rel="stylesheet"
@@ -57,64 +44,62 @@
     referrerpolicy="no-referrer"
   />
 
-  <!-- 🚫 Style de secours si JS désactivé (certains thèmes en ont besoin) -->
+  <!-- Style de secours si JS désactivé (fourni par le thème) -->
   <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 
-  <!-- 🔎 JSON-LD — Person + WebSite
-       Bonne pratique : séparer les types via @graph au lieu de mélanger plusieurs @type sur un seul objet. -->
+  <!-- =========================================================================
+       JSON-LD — Person + WebSite (SEO & Knowledge Panels)
+       Remplace "example.com" + profils réels.
+       ========================================================================= -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "name": "Xavier Rousseau",
-        "jobTitle": "Data Analyst / Data Science & Engineering",
-        "url": "https://xsorouz.github.io/",
-        "image": "https://xsorouz.github.io/images/portrait.png",
-        "email": "mailto:rousseau.pro@outlook.fr",
-        "telephone": "+33 6 95 29 05 05",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Brest",
-          "addressCountry": "FR"
-        },
-        "sameAs": [
-          "https://www.linkedin.com/in/xavierrousseau",
-          "https://github.com/xsorouz"
-        ],
-        "description": "Des données fiables, des pipelines qui tournent, des indicateurs utiles. Conception de solutions data de bout en bout : collecte, fiabilité, gouvernance, décision."
-      },
-      {
-        "@type": "WebSite",
-        "name": "Xavier Rousseau — Portfolio",
-        "url": "https://xsorouz.github.io/",
-        "inLanguage": "fr-FR",
-        "publisher": { "@type": "Person", "name": "Xavier Rousseau" }
-      }
-    ]
+    "@type": ["Person","WebSite"],
+    "name": "Xavier Rousseau",
+    "jobTitle": "Data Analyst / Data Science & Engineering",
+    "url": "https://example.com",
+    "image": "https://example.com/images/portrait.png",
+    "email": "mailto:rousseau.pro@outlook.fr",
+    "telephone": "+33 6 95 29 05 05",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Brest",
+      "addressCountry": "FR"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/xavierrousseau",
+      "https://github.com/xsorouz"
+    ],
+    "description": "Des données fiables, des pipelines qui tournent, des indicateurs utiles. Conception de solutions data de bout en bout : collecte, fiabilité, gouvernance, décision."
   }
   </script>
 </head>
 
+<!--
+  Classe "is-preload" utilisée par Hyperspace pour les effets init.
+  Le JS du thème la retire après chargement.
+-->
 <body class="is-preload">
-  <!-- ♿ Lien d’évitement : permet aux claviers/lecteurs d’écran d’aller droit au contenu -->
+
+  <!-- Lien d’évitement : clavier/screenreader → contenu -->
   <a href="#intro" class="skip-link"
      style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
     Aller au contenu
   </a>
 
-  <!-- 🧭 Sidebar (navigation ancrée)
-       - Astuce accessibilité : l’attribut aria-current est géré par le petit script plus bas.
-       - Si tu veux un soulignement permanent de la section courante côté CSS, voir `.active` et `a[aria-current]`. -->
+  <!-- =========================================================
+       Sidebar (navigation ancrée)
+       - Les href pointent vers les id des sections
+       - L’état "active / aria-current" est géré par le petit script en bas
+       ========================================================= -->
   <section id="sidebar" aria-label="Navigation latérale">
     <div class="inner">
       <nav>
         <ul>
-          <!-- ⚠️ Voir la note en haut du fichier sur l’emplacement des id (section vs h2) -->
           <li><a href="#intro">Accueil</a></li>
           <li><a href="#about">À propos</a></li>
           <li><a href="#value">Valeur</a></li>
+          <!-- cible large pour l’observateur : la section entière -->
           <li><a href="#skills-section">Compétences</a></li>
           <li><a href="#experience">Expériences</a></li>
           <li><a href="#projects">Projets</a></li>
@@ -125,16 +110,18 @@
     </div>
   </section>
 
-  <!-- 📦 Contenu principal -->
+  <!-- =========================================================
+       Contenu principal
+       ========================================================= -->
   <main id="wrapper">
 
-    <!-- 🌟 HERO / INTRO
-         - Objectif : présentation rapide + CTA prioritaires.
-         - LCP (Largest Contentful Paint) : on évite `loading="lazy"` sur le portrait pour ne pas retarder l’affichage. -->
+    <!-- =======================================================
+         HERO / INTRO
+         ======================================================= -->
     <section id="intro" class="wrapper style1 hero fullscreen fade-up" aria-labelledby="title-hero">
       <div class="inner hero-inner">
 
-        <!-- 📝 Colonne texte -->
+        <!-- Colonne texte -->
         <div class="hero-col hero-col--text">
           <h1 id="title-hero" class="hero-title">Xavier Rousseau</h1>
 
@@ -148,21 +135,18 @@
             avec un souci permanent de <span class="hl">fiabilité</span> et de <span class="hl">gouvernance</span>.
           </p>
 
-          <!-- Badges de statut : évite les emojis dans le texte de lien → ils sont décoratifs ici (aria-hidden) -->
           <ul class="hero-status" aria-label="Statut et localisation">
             <li><span class="status-ico" aria-hidden="true">⚡</span> Disponible immédiatement</li>
             <li><span class="status-ico" aria-hidden="true">💼</span> CDI</li>
             <li><span class="status-ico" aria-hidden="true">🌍</span> Brest • Remote (France)</li>
           </ul>
 
-          <!-- Bullets : promesse de valeur → lisibles et scannables -->
           <ul class="hero-bullets" aria-label="Points forts">
             <li><strong>End-to-end</strong> — collecte → préparation → pipelines → décision.</li>
             <li><strong>Fiabilité &amp; gouvernance</strong> — qualité, règles, traçabilité intégrées.</li>
             <li><strong>Industrialisation</strong> — orchestration, monitoring, exploitation durable.</li>
           </ul>
 
-          <!-- CTA principaux (priorité à "Me contacter") -->
           <ul class="actions hero-actions">
             <li><a href="#contact" class="button primary cta-lg">Me contacter</a></li>
             <li><a href="#value" class="button outline cta-lg">Découvrir</a></li>
@@ -172,12 +156,11 @@
               </a>
             </li>
           </ul>
-        </div>
+        </div><!-- /colonne texte -->
 
-        <!-- 🖼️ Colonne visuelle (portrait + blob décoratif) -->
+        <!-- Colonne visuelle -->
         <div class="hero-col hero-col--visual" aria-hidden="true">
           <div class="portrait">
-            <!-- Remplace l’image si besoin → idéalement exporte-la carrée 720×720, optimisée (WebP/AVIF + PNG fallback) -->
             <img src="images/portrait.png" alt="Portrait de Xavier Rousseau" width="720" height="720" decoding="async">
           </div>
           <div class="hero-blob"></div>
@@ -186,10 +169,12 @@
       </div>
     </section>
 
-    <!-- ℹ️ À PROPOS — spotlight (image + texte) -->
+    <!-- =======================================================
+         À PROPOS — spotlight (image + texte)
+         ======================================================= -->
     <section id="one" class="wrapper style2 spotlights" aria-labelledby="about">
       <section>
-        <!-- Image (gauche) : tu peux mettre un visuel abstrait si tu ne veux pas afficher ton visage -->
+        <!-- Image (gauche) -->
         <a class="image">
           <img
             src="images/photo-xavier.png"
@@ -224,11 +209,14 @@
           </div>
         </div>
       </section>
-    </section>
+    </section><!-- /#one -->
 
-    <!-- 📈 VALEUR / IMPACT — cartes (liste de valeur) -->
+    <!-- =======================================================
+         VALEUR / IMPACT — cartes
+         ======================================================= -->
     <section id="value" class="wrapper style2" aria-labelledby="value-title">
       <div class="inner value-inner">
+
         <header class="value-header">
           <h2 id="value-title">Ce que j’apporte — Métier &amp; Valeur</h2>
           <p class="lead">Du besoin métier à l’usage, en passant par la qualité et l’industrialisation.</p>
@@ -237,7 +225,7 @@
         <div class="value-grid" role="list" aria-label="Synthèse de valeur">
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-bullseye"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-bullseye"></i></span>
               <h3>Analyses stratégiques &amp; ciblages</h3>
             </div>
             <p>
@@ -248,7 +236,7 @@
 
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-chart-line"></i></span>
               <h3>Tableaux de bord clairs &amp; adoptés</h3>
             </div>
             <p>
@@ -259,7 +247,7 @@
 
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-brain"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-brain"></i></span>
               <h3>Modélisation &amp; prévisions utiles</h3>
             </div>
             <p>
@@ -270,7 +258,7 @@
 
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-shield-halved"></i></span>
               <h3>Qualité &amp; gouvernance</h3>
             </div>
             <p>
@@ -281,7 +269,7 @@
 
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-gears"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-gears"></i></span>
               <h3>Automatisation &amp; fiabilité</h3>
             </div>
             <p>
@@ -292,7 +280,7 @@
 
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-people-arrows"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-people-arrows"></i></span>
               <h3>Lien métier ↔ IT</h3>
             </div>
             <p>
@@ -307,9 +295,11 @@
           <a href="#skills-section" class="button outline">Voir mes compétences</a>
         </footer>
       </div>
-    </section>
+    </section><!-- /#value -->
 
-    <!-- 🛠️ COMPÉTENCES — spotlight + features -->
+    <!-- =======================================================
+         COMPÉTENCES — spotlight + features (cartes)
+         ======================================================= -->
     <section id="skills-section" class="wrapper style2 spotlights" aria-labelledby="skills">
       <section>
         <a class="image">
@@ -328,25 +318,25 @@
 
             <div class="features">
               <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
+                <span class="icon solid major fa-code" aria-hidden="true"></span>
                 <h3>Collecte &amp; pipelines</h3>
                 <p>Python, SQL — Orchestration : Airflow, Kestra, dbt — Ingestion &amp; streaming : Kafka/Redpanda, MinIO</p>
               </section>
 
               <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
+                <span class="icon solid major fa-chart-line" aria-hidden="true"></span>
                 <h3>Analyse &amp; modélisation</h3>
                 <p>Statistiques &amp; économétrie : SAS, R, Python — Prévisions, scores, segmentations — Data cleaning &amp; exploration</p>
               </section>
 
               <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-chart-bar"></i></span>
+                <span class="icon solid major fa-chart-bar" aria-hidden="true"></span>
                 <h3>Visualisation &amp; pilotage</h3>
                 <p>Power BI, Tableau, Metabase — Kibana pour le suivi produit &amp; technique</p>
               </section>
 
               <section>
-                <span class="icon major" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+                <span class="icon solid major fa-shield-halved" aria-hidden="true"></span>
                 <h3>Qualité &amp; gouvernance</h3>
                 <p>Great Expectations, tests Python/SQL — Documentation &amp; traçabilité — RGPD — Monitoring : Prometheus, Grafana</p>
               </section>
@@ -354,9 +344,11 @@
           </div>
         </div>
       </section>
-    </section>
+    </section><!-- /#skills-section -->
 
-    <!-- 🧭 EXPÉRIENCES CLÉS — chronologie -->
+    <!-- =======================================================
+         EXPÉRIENCES CLÉS — chronologie
+         ======================================================= -->
     <section id="experience" class="wrapper style3 fade-up" aria-labelledby="exp-title">
       <div class="inner">
         <h2 id="exp-title">Expériences clés</h2>
@@ -419,9 +411,11 @@
           </ul>
         </article>
       </div>
-    </section>
+    </section><!-- /#experience -->
 
-    <!-- 🧪 PROJETS PERSONNELS — cartes -->
+    <!-- =======================================================
+         PROJETS PERSONNELS — 3 cartes détaillées
+         ======================================================= -->
     <section id="projects" class="wrapper style2" aria-labelledby="projects-title">
       <div class="inner value-inner">
         <header class="value-header">
@@ -433,19 +427,19 @@
           <!-- Datalyzer -->
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-microscope"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-microscope"></i></span>
               <h3>Datalyzer — Analyse exploratoire automatisée</h3>
             </div>
             <p>
               Application web pour explorer rapidement les données : contrôles qualité (valeurs manquantes, doublons, outliers),
-              visualisations claires, scoring de fiabilité. Stack : Streamlit → évolutive vers API fa-solidtAPI.
+              visualisations claires, scoring de fiabilité. Stack : Streamlit → évolutive vers API FastAPI.
             </p>
           </article>
 
           <!-- Reco -->
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-wand-magic-sparkles"></i></span>
               <h3>Moteur de recommandation — Application ludique</h3>
             </div>
             <p>
@@ -457,7 +451,7 @@
           <!-- Stack open source -->
           <article class="card" role="listitem">
             <div class="card-head">
-              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
+              <span class="icon-badge" aria-hidden="true"><i class="fas fa-layer-group"></i></span>
               <h3>Stack data open-source — Orchestration &amp; fiabilité</h3>
             </div>
             <p>
@@ -473,9 +467,11 @@
           </a>
         </footer>
       </div>
-    </section>
+    </section><!-- /#projects -->
 
-    <!-- 🎓 FORMATION -->
+    <!-- =======================================================
+         FORMATION — résumé clair
+         ======================================================= -->
     <section id="education" class="wrapper style3 fade-up" aria-labelledby="edu-title">
       <div class="inner">
         <h2 id="edu-title">Formation</h2>
@@ -483,6 +479,7 @@
           Un parcours alliant mathématiques, statistiques et data engineering — pour transformer la donnée en décisions fiables et actionnables.
         </p>
 
+        <!-- Diplôme 1 -->
         <article class="box">
           <header>
             <h3>Data Engineer — OpenClassrooms</h3>
@@ -496,6 +493,7 @@
           <p class="muted">Une spécialisation récente qui complète mon parcours analytique et fait de moi un profil full-stack data.</p>
         </article>
 
+        <!-- Diplôme 2 -->
         <article class="box">
           <header>
             <h3>Master 2 Statistiques &amp; Économétrie — Université de Rennes 1</h3>
@@ -507,6 +505,7 @@
           </ul>
         </article>
 
+        <!-- Diplôme 3 -->
         <article class="box">
           <header>
             <h3>Licence Mathématiques — Université de Bretagne Occidentale</h3>
@@ -518,9 +517,11 @@
           </ul>
         </article>
       </div>
-    </section>
+    </section><!-- /#education -->
 
-    <!-- ✉️ CONTACT -->
+    <!-- =======================================================
+         CONTACT
+         ======================================================= -->
     <section id="contact" class="wrapper style1 fade-up" aria-labelledby="contact-title">
       <div class="inner">
         <h2 id="contact-title">Contact</h2>
@@ -529,8 +530,7 @@
         </p>
 
         <div class="split style1">
-          <!-- Formulaire (démo — à brancher côté serveur si besoin)
-               Accessibilité : labels reliés via for/id ; inputs avec autocomplete. -->
+          <!-- Formulaire (démo — à brancher côté serveur si besoin) -->
           <section aria-label="Formulaire de contact">
             <form method="post" action="#">
               <div class="fields">
@@ -571,18 +571,8 @@
               <li>
                 <h3>Réseaux</h3>
                 <ul class="icons">
-                  <li>
-                    <a href="https://www.linkedin.com/in/xavierrousseau" target="_blank" rel="noopener" aria-label="LinkedIn">
-                      <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
-                      <span class="sr-only">LinkedIn</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/xsorouz" target="_blank" rel="noopener" aria-label="GitHub">
-                      <i class="fa-brands fa-github" aria-hidden="true"></i>
-                      <span class="sr-only">GitHub</span>
-                    </a>
-                  </li>
+                  <li><a href="https://www.linkedin.com/in/xavierrousseau" target="_blank" rel="noopener" class="icon brands fa-linkedin-in" aria-label="LinkedIn"><span class="label">LinkedIn</span></a></li>
+                  <li><a href="https://github.com/xsorouz" target="_blank" rel="noopener" class="icon brands fa-github" aria-label="GitHub"><span class="label">GitHub</span></a></li>
                 </ul>
               </li>
               <li>
@@ -595,9 +585,11 @@
       </div>
     </section>
 
-  </main>
+  </main><!-- /#wrapper -->
 
-  <!-- 🔚 Footer -->
+  <!-- =======================================================
+       Footer
+       ======================================================= -->
   <footer id="footer" class="wrapper style1-alt" aria-label="Pied de page">
     <div class="inner">
       <ul class="menu">
@@ -607,8 +599,11 @@
     </div>
   </footer>
 
-  <!-- 📜 Scripts Hyperspace (defer pour ne pas bloquer le rendu)
-       Conseil : si tu n’utilises pas les effets/scroll fournis par le thème, tu peux retirer ces libs. -->
+  <!-- =======================================================
+       Scripts Hyperspace
+       - On ajoute "defer" pour ne pas bloquer le rendu
+       - Ordre conservé (dépendances jQuery)
+       ======================================================= -->
   <script src="assets/js/jquery.min.js" defer></script>
   <script src="assets/js/jquery.scrollex.min.js" defer></script>
   <script src="assets/js/jquery.scrolly.min.js" defer></script>
@@ -617,9 +612,11 @@
   <script src="assets/js/util.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 
-  <!-- ✨ Surlignage auto du lien de menu correspondant à la section visible
-       - Utilise IntersectionObserver (support large). Pas d’effet si non supporté (fail-safe).
-       - Root margins asymétriques : on considère une section "active" quand son titre est proche du centre de l’écran. -->
+  <!--
+    Bonus UX : surlignage auto du lien de menu correspondant à la section visible.
+    - Ajoute/retire la classe "active" et l'attribut aria-current="true".
+    - Sans dépendance ; s'exécute après le thème (defer).
+  -->
   <script defer>
     (function () {
       const links = Array.from(document.querySelectorAll('#sidebar nav a'));
@@ -635,6 +632,7 @@
           const id = '#' + entry.target.id;
           const link = map.get(id);
           if (!link) return;
+
           if (entry.isIntersecting) {
             links.forEach(l => { l.classList.remove('active'); l.removeAttribute('aria-current'); });
             link.classList.add('active');
@@ -644,7 +642,7 @@
       };
 
       const io = new IntersectionObserver(onIntersect, {
-        rootMargin: '-40% 0px -55% 0px',
+        rootMargin: '-40% 0px -55% 0px', // fenêtre de déclenchement confortable
         threshold: [0]
       });
       sections.forEach(s => io.observe(s));
