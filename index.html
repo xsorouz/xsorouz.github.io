@@ -1,121 +1,70 @@
 <!DOCTYPE HTML>
 <!--
-  Portfolio — structure claire, FR, accessible, prête pour GitHub Pages.
-  Cette version est "pédagogique" : beaucoup de commentaires pour modifier vite sans se perdre.
-
-  🧭 Plan rapide
-  - <head> : SEO, Open Graph, Twitter, JSON-LD (schéma Person + WebSite via @graph), CSS & icônes
-  - <body> : skip-link, sidebar (nav), main (sections : hero, about, value, skills, experience, projects, education, contact), footer
-  - <script> : libs Hyperspace (si utilisées) + petit script d'auto-highlight du lien actif
-
-  ⚠️ Note importante (ancre/scroll) :
-  Dans la nav, certains liens pointent vers des <h2 id="..."> (ex. #about) et non vers la section
-  englobante. C’est OK, mais le CSS `section[id]{ scroll-margin-top: ... }` ne s’applique alors pas.
-  → Solutions simples (choisis UNE option) :
-     1) (RECO) Mettre l’id sur la <section> elle-même (ex. <section id="about"> ... <h2 id="about-title">)
-     2) Ajouter en CSS : `:is(section,h1,h2,h3)[id]{ scroll-margin-top: calc(var(--topbar-h) + 12px); }`
-     3) Laisser tel quel si le décalage au scroll ne te gêne pas.
+  Portfolio — version pédagogique et commentée
+  - Direction artistique : sombre, net, lisible, avec micro-accents bleus.
+  - Hyperspace : seulement pour le pattern "spotlights" d’À propos (image + texte).
+  - Accessibilité : skip-link, ancres propres, contrastes OK, aria là où pertinent.
 -->
 <html lang="fr">
 <head>
-  <!-- 📌 Métadonnées de base (toujours en tête) -->
+  <!-- ============== MÉTADONNÉES / SEO / SOCIAL ===================== -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Xavier Rousseau — Data Analyst • Data Science & Engineering</title>
-  <meta name="description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Conception de solutions data de bout en bout : collecte, fiabilité, gouvernance, décision. Disponible immédiatement — CDI Brest / Remote (France)." />
-  <meta name="robots" content="index,follow">
-  <meta name="theme-color" content="#0f172a"> <!-- Couleur d’UI (barre mobile) → cohérente avec --bg -->
-  <meta name="color-scheme" content="dark only"> <!-- Déclare un thème sombre par défaut -->
+  <meta name="description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Solutions data de bout en bout — collecte, fiabilité, gouvernance, décision. CDI Brest / Remote." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="color-scheme" content="dark only" />
   <link rel="canonical" href="https://xsorouz.github.io/">
 
-  <!-- 🪪 Open Graph / partage social (Facebook, LinkedIn…) -->
+  <!-- Open Graph / Twitter -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Xavier Rousseau">
   <meta property="og:title" content="Xavier Rousseau — Data Analyst • Data Science & Engineering">
-  <meta property="og:description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Solutions data de bout en bout. Disponible immédiatement — CDI Brest / Remote (France).">
+  <meta property="og:description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Solutions data de bout en bout.">
   <meta property="og:url" content="https://xsorouz.github.io/">
-  <!-- Astuce GitHub Pages : assure-toi que l’image existe à ce chemin ou mets une URL absolue différente -->
   <meta property="og:image" content="https://xsorouz.github.io/images/og-cover.jpg">
   <meta property="og:locale" content="fr_FR">
-
-  <!-- 🐦 Twitter Card (utile pour les aperçus) -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Xavier Rousseau — Data Analyst • Data Science & Engineering">
-  <meta name="twitter:description" content="Des données fiables, des pipelines qui tournent, des indicateurs utiles. Solutions data de bout en bout.">
-  <meta name="twitter:image" content="https://xsorouz.github.io/images/og-cover.jpg">
 
-  <!-- 🎨 CSS principal -->
+  <!-- ============== STYLES ===================== -->
   <link rel="stylesheet" href="assets/css/app.css">
-
-  <!-- 🔣 Icônes (Font Awesome 6) — préconnexion pour gagner un RTT + CORS corrects
-       Conseil : ajoute l’attribut `integrity` quand tu fixes précisément la version pour la sécurité SRI. -->
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    crossorigin
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- 🚫 Style de secours si JS désactivé (certains thèmes en ont besoin) -->
   <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 
-  <!-- 🔎 JSON-LD — Person + WebSite
-       Bonne pratique : séparer les types via @graph au lieu de mélanger plusieurs @type sur un seul objet. -->
+  <!-- Icônes (Font Awesome) -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin
+        referrerpolicy="no-referrer">
+
+  <!-- ============== JSON-LD minimal ===================== -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Person",
-        "name": "Xavier Rousseau",
-        "jobTitle": "Data Analyst / Data Science & Engineering",
-        "url": "https://xsorouz.github.io/",
-        "image": "https://xsorouz.github.io/images/portrait.png",
-        "email": "mailto:rousseau.pro@outlook.fr",
-        "telephone": "+33 6 95 29 05 05",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Brest",
-          "addressCountry": "FR"
-        },
-        "sameAs": [
-          "https://www.linkedin.com/in/xavierrousseau",
-          "https://github.com/xsorouz"
-        ],
-        "description": "Des données fiables, des pipelines qui tournent, des indicateurs utiles. Conception de solutions data de bout en bout : collecte, fiabilité, gouvernance, décision."
-      },
-      {
-        "@type": "WebSite",
-        "name": "Xavier Rousseau — Portfolio",
-        "url": "https://xsorouz.github.io/",
-        "inLanguage": "fr-FR",
-        "publisher": { "@type": "Person", "name": "Xavier Rousseau" }
-      }
-    ]
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Xavier Rousseau",
+    "jobTitle":"Data Analyst / Data Science & Engineering",
+    "url":"https://xsorouz.github.io/",
+    "image":"https://xsorouz.github.io/images/portrait.png",
+    "sameAs":["https://www.linkedin.com/in/xavierrousseau","https://github.com/xsorouz"]
   }
   </script>
 </head>
 
 <body class="is-preload">
-  <!-- ♿ Lien d’évitement : permet aux claviers/lecteurs d’écran d’aller droit au contenu -->
-  <a href="#intro" class="skip-link"
-     style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
-    Aller au contenu
-  </a>
+  <!-- ============== SKIP LINK (A11Y) ===================== -->
+  <a href="#intro" class="skip-link">Aller au contenu</a>
 
-  <!-- 🧭 Sidebar (navigation ancrée)
-       - Astuce accessibilité : l’attribut aria-current est géré par le petit script plus bas.
-       - Si tu veux un soulignement permanent de la section courante côté CSS, voir `.active` et `a[aria-current]`. -->
+  <!-- ============== SIDEBAR / NAV ===================== -->
   <section id="sidebar" aria-label="Navigation latérale">
     <div class="inner">
       <nav>
         <ul>
-          <!-- ⚠️ Voir la note en haut du fichier sur l’emplacement des id (section vs h2) -->
+          <!-- NB : nous ancrons directement sur les <section id="..."> -->
           <li><a href="#intro">Accueil</a></li>
           <li><a href="#about">À propos</a></li>
           <li><a href="#value">Valeur</a></li>
-          <li><a href="#skills-section">Compétences</a></li>
+          <li><a href="#skills">Compétences</a></li>
           <li><a href="#experience">Expériences</a></li>
           <li><a href="#projects">Projets</a></li>
           <li><a href="#education">Formation</a></li>
@@ -125,59 +74,50 @@
     </div>
   </section>
 
-  <!-- 📦 Contenu principal -->
+  <!-- ============== WRAPPER PRINCIPAL ===================== -->
   <main id="wrapper">
 
-    <!-- 🌟 HERO / INTRO
-         - Objectif : présentation rapide + CTA prioritaires.
-         - LCP (Largest Contentful Paint) : on évite `loading="lazy"` sur le portrait pour ne pas retarder l’affichage. -->
+    <!-- =====================================================
+         1) HERO / INTRO
+         - LCP : on évite lazy-load sur le portrait
+         - DA : gros titre + promesse + 3 CTA
+    ====================================================== -->
     <section id="intro" class="wrapper style1 hero fullscreen fade-up" aria-labelledby="title-hero">
       <div class="inner hero-inner">
 
-        <!-- 📝 Colonne texte -->
+        <!-- Colonne texte -->
         <div class="hero-col hero-col--text">
           <h1 id="title-hero" class="hero-title">Xavier Rousseau</h1>
-
-          <p class="hero-role">
-            Expert Data Analyst • Data Science &amp; Engineering • Gestion de projets
-          </p>
+          <p class="hero-role">Expert Data Analyst • Data Science &amp; Engineering • Gestion de projets</p>
 
           <p class="hero-value">
-            Des <span class="hl">données fiables</span>, des <span class="hl">pipelines qui tournent</span>, des
-            <span class="hl">indicateurs utiles</span>. Je conçois des solutions data de bout en bout — de la collecte à la décision —
-            avec un souci permanent de <span class="hl">fiabilité</span> et de <span class="hl">gouvernance</span>.
+            Des <span class="hl">données fiables</span>, des <span class="hl">pipelines qui tournent</span>,
+            des <span class="hl">indicateurs utiles</span>. Solutions data de bout en bout — de la collecte à la décision —
+            avec <span class="hl">qualité</span> et <span class="hl">gouvernance</span> intégrées.
           </p>
 
-          <!-- Badges de statut : évite les emojis dans le texte de lien → ils sont décoratifs ici (aria-hidden) -->
           <ul class="hero-status" aria-label="Statut et localisation">
             <li><span class="status-ico" aria-hidden="true">⚡</span> Disponible immédiatement</li>
             <li><span class="status-ico" aria-hidden="true">💼</span> CDI</li>
             <li><span class="status-ico" aria-hidden="true">🌍</span> Brest • Remote (France)</li>
           </ul>
 
-          <!-- Bullets : promesse de valeur → lisibles et scannables -->
           <ul class="hero-bullets" aria-label="Points forts">
             <li><strong>End-to-end</strong> — collecte → préparation → pipelines → décision.</li>
-            <li><strong>Fiabilité &amp; gouvernance</strong> — qualité, règles, traçabilité intégrées.</li>
+            <li><strong>Fiabilité &amp; gouvernance</strong> — qualité, règles, traçabilité.</li>
             <li><strong>Industrialisation</strong> — orchestration, monitoring, exploitation durable.</li>
           </ul>
 
-          <!-- CTA principaux (priorité à "Me contacter") -->
           <ul class="actions hero-actions">
             <li><a href="#contact" class="button primary cta-lg">Me contacter</a></li>
             <li><a href="#value" class="button outline cta-lg">Découvrir</a></li>
-            <li>
-              <a href="assets/docs/CV_Xavier_Rousseau.pdf" target="_blank" rel="noopener" class="button ghost cta-lg" download>
-                Télécharger le CV
-              </a>
-            </li>
+            <li><a href="assets/docs/CV_Xavier_Rousseau.pdf" target="_blank" rel="noopener" class="button ghost cta-lg" download>Télécharger le CV</a></li>
           </ul>
         </div>
 
-        <!-- 🖼️ Colonne visuelle (portrait + blob décoratif) -->
+        <!-- Colonne visuelle -->
         <div class="hero-col hero-col--visual" aria-hidden="true">
           <div class="portrait">
-            <!-- Remplace l’image si besoin → idéalement exporte-la carrée 720×720, optimisée (WebP/AVIF + PNG fallback) -->
             <img src="images/portrait.png" alt="Portrait de Xavier Rousseau" width="720" height="720" decoding="async">
           </div>
           <div class="hero-blob"></div>
@@ -186,13 +126,26 @@
       </div>
     </section>
 
-    <!-- ℹ️ À PROPOS — spotlight (texte à gauche, image à droite) -->
-    <section id="one" class="wrapper style2 spotlights about" aria-labelledby="about">
+    <!-- =====================================================
+         2) À PROPOS — PATTERN “SPOTLIGHTS” (image à gauche)
+         - Structure Hyperspace : <section class="spotlights"><section>…</section></section>
+         - Image : pleine hauteur, recadrée (object-fit:cover). Cadrage ajusté via style="object-position: …".
+         - Texte : largeur augmentée pour aérer la lecture (max 74ch).
+    ====================================================== -->
+    <section id="about" class="wrapper style2 spotlights about" aria-labelledby="about-title">
       <section>
-        <!-- Contenu (gauche) -->
+        <!-- Colonne IMAGE (image décorative → alt vide) -->
+        <a class="image" aria-hidden="true">
+          <img src="images/about.png" alt="" loading="lazy" decoding="async"
+               width="1200" height="1600"
+               style="object-position:center 35%">
+        </a>
+
+        <!-- Colonne TEXTE -->
         <div class="content">
           <div class="inner">
-            <h2 id="about">À propos</h2>
+            <h2 id="about-title">À propos</h2>
+
             <p>
               Je conçois des produits data qui tiennent dans la durée : des pipelines qui tournent, des indicateurs qui éclairent,
               des règles de gestion qu’on peut expliquer. Mon parcours m’a fait passer par les rôles de
@@ -201,40 +154,29 @@
             </p>
             <p>
               Côté perso, je suis un collectionneur-joueur de consoles rétro, amateur de mangas et passionné du Japon.
-              Cette culture pop n’est pas anecdotique : elle nourrit ma curiosité, mon sens du système et mon attention aux détails.
-              Mes années de <strong>judo</strong> ont installé des repères très concrets dans ma pratique :
-              <em>respect</em>, <em>contrôle de soi</em>, <em>rigueur</em>, <em>modestie</em>, <em>courage</em> et <em>progression pas à pas</em>.
-              Ce cadre me pousse à documenter, tester, et chercher le geste juste plutôt que l’esbroufe.
+              Cette culture pop nourrit ma curiosité, mon sens du système et mon attention aux détails.
+              Mes années de <strong>judo</strong> ont installé des repères très concrets : <em>respect</em>, <em>contrôle de soi</em>,
+              <em>rigueur</em>, <em>modestie</em>, <em>courage</em> et <em>progression pas à pas</em>.
             </p>
             <p>
-              Professionnellement, j’apporte une vision de bout en bout : collecte, nettoyage, <em>data quality</em>,
-              modélisation utile et restitution adoptée. J’étends aujourd’hui cette approche au <strong>data engineering</strong> :
-              <em>orchestration</em> (Airflow/Kestra/dbt), <em>streaming</em> (Kafka/Redpanda), stockage fiable (PostgreSQL/MinIO),
-              et <em>monitoring</em> (Prometheus/Grafana) — pour que la fiabilité soit <em>conçue</em> dès le départ, pas ajoutée après.
+              Professionnellement, j’apporte une vision de bout en bout : collecte, nettoyage, <em>data quality</em>, modélisation utile et restitution adoptée.
+              J’étends aujourd’hui cette approche au <strong>data engineering</strong> : <em>orchestration</em> (Airflow/Kestra/dbt),
+              <em>streaming</em> (Kafka/Redpanda), stockage fiable (PostgreSQL/MinIO), et <em>monitoring</em> (Prometheus/Grafana) — pour que la fiabilité
+              soit <em>conçue</em> dès le départ, pas ajoutée après.
             </p>
             <p>
-              Mon credo tient en trois verbes : <strong>clarifier</strong> (rendre compréhensible),
-              <strong>fiabiliser</strong> (qualité, règles, traçabilité), <strong>valoriser</strong> (des métriques qui aident à décider).
-              Si vous cherchez un profil curieux, rigoureux et capable d’aligner technique et usage, on va bien s’entendre.
+              Mon credo tient en trois verbes : <strong>clarifier</strong> (rendre compréhensible), <strong>fiabiliser</strong> (qualité, règles, traçabilité),
+              <strong>valoriser</strong> (des métriques qui aident à décider). Si vous cherchez un profil curieux, rigoureux et capable d’aligner
+              technique et usage, on va bien s’entendre.
             </p>
           </div>
-        </div>
-
-        <!-- Image (droite) — décorative -->
-        <div class="image" aria-hidden="true">
-          <img
-            src="images/about.png"
-            alt=""
-            width="800" height="1000"
-            loading="lazy" decoding="async"
-          />
         </div>
       </section>
     </section>
 
-
-
-    <!-- 📈 VALEUR / IMPACT — cartes (liste de valeur) -->
+    <!-- =====================================================
+         3) VALEUR — cartes
+    ====================================================== -->
     <section id="value" class="wrapper style2" aria-labelledby="value-title">
       <div class="inner value-inner">
         <header class="value-header">
@@ -248,10 +190,7 @@
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-bullseye"></i></span>
               <h3>Analyses stratégiques &amp; ciblages</h3>
             </div>
-            <p>
-              Référentiels clients unifiés, segmentations marketing, ciblages précis (exclusions RGPD),
-              analyses des ventes et du portefeuille pour orienter les stratégies.
-            </p>
+            <p>Référentiels clients unifiés, segmentations marketing, ciblages précis (exclusions RGPD), analyses des ventes.</p>
           </article>
 
           <article class="card" role="listitem">
@@ -259,10 +198,7 @@
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
               <h3>Tableaux de bord clairs &amp; adoptés</h3>
             </div>
-            <p>
-              Dashboards interactifs, KPI co-construits et validés avec les métiers,
-              suivi de la performance commerciale, budgétaire et produit, formation à l’usage.
-            </p>
+            <p>Dashboards interactifs, KPI co-construits avec les métiers, suivi de la performance, formation à l’usage.</p>
           </article>
 
           <article class="card" role="listitem">
@@ -270,10 +206,7 @@
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-brain"></i></span>
               <h3>Modélisation &amp; prévisions utiles</h3>
             </div>
-            <p>
-              Projections budgétaires, scores marketing, indicateurs de performance, tests statistiques,
-              documentation claire et approche pragmatique tournée métier.
-            </p>
+            <p>Projections, scores, indicateurs de performance, tests statistiques, documentation claire et pragmatique.</p>
           </article>
 
           <article class="card" role="listitem">
@@ -281,10 +214,7 @@
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
               <h3>Qualité &amp; gouvernance</h3>
             </div>
-            <p>
-              Règles de gestion documentées, contrôles qualité, traçabilité des corrections,
-              conformité réglementaire (RGPD) sur les flux critiques.
-            </p>
+            <p>Règles de gestion documentées, contrôles qualité, traçabilité, conformité RGPD sur les flux critiques.</p>
           </article>
 
           <article class="card" role="listitem">
@@ -292,10 +222,7 @@
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-gears"></i></span>
               <h3>Automatisation &amp; fiabilité</h3>
             </div>
-            <p>
-              Industrialisation des analyses récurrentes, orchestration de traitements,
-              stockage fiable, suivi de la fiabilité des pipelines dans la durée.
-            </p>
+            <p>Industrialisation des analyses récurrentes, orchestration des traitements, monitoring de la fiabilité.</p>
           </article>
 
           <article class="card" role="listitem">
@@ -303,99 +230,70 @@
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-people-arrows"></i></span>
               <h3>Lien métier ↔ IT</h3>
             </div>
-            <p>
-              Ateliers de cadrage, traduction en solutions concrètes, suivi de projet de la conception à la recette,
-              interface métiers, DSI et équipes data.
-            </p>
+            <p>Ateliers de cadrage, traduction en solutions concrètes, suivi de projet de la conception à la recette.</p>
           </article>
         </div>
 
         <footer class="value-cta">
           <a href="#contact" class="button primary">Discutons de vos enjeux</a>
-          <a href="#skills-section" class="button outline">Voir mes compétences</a>
+          <a href="#skills" class="button outline">Voir mes compétences</a>
         </footer>
       </div>
     </section>
-<!-- 🧰 COMPÉTENCES — cartes (même style que "Valeur") -->
-<section id="skills-section" class="wrapper style2" aria-labelledby="skills-title">
-  <div class="inner value-inner">
-    <header class="value-header">
-      <h2 id="skills-title">Compétences techniques</h2>
-      <p class="lead">Outils &amp; méthodes — de la collecte à la valorisation.</p>
-    </header>
 
-    <div class="value-grid" role="list" aria-label="Compétences">
-      <!-- Collecte & pipelines -->
-      <article class="card" role="listitem">
-        <div class="card-head">
-          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
-          <h3>Collecte &amp; pipelines</h3>
+    <!-- =====================================================
+         4) COMPÉTENCES — cartes
+    ====================================================== -->
+    <section id="skills" class="wrapper style2" aria-labelledby="skills-title">
+      <div class="inner value-inner">
+        <header class="value-header">
+          <h2 id="skills-title">Compétences techniques</h2>
+          <p class="lead">Outils &amp; méthodes — de la collecte à la valorisation.</p>
+        </header>
+
+        <div class="value-grid" role="list" aria-label="Compétences">
+          <article class="card" role="listitem">
+            <div class="card-head">
+              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-code"></i></span>
+              <h3>Collecte &amp; pipelines</h3>
+            </div>
+            <p>Python, SQL — Orchestration : Airflow, Kestra, dbt — Ingestion &amp; streaming : Kafka/Redpanda, MinIO.</p>
+          </article>
+
+          <article class="card" role="listitem">
+            <div class="card-head">
+              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
+              <h3>Analyse &amp; modélisation</h3>
+            </div>
+            <p>Stats &amp; économétrie (SAS, R, Python) — Prévisions, scores, segmentations — Data cleaning &amp; EDA.</p>
+          </article>
+
+          <article class="card" role="listitem">
+            <div class="card-head">
+              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-bar"></i></span>
+              <h3>Visualisation &amp; pilotage</h3>
+            </div>
+            <p>Power BI, Tableau, Metabase — Kibana pour le suivi produit &amp; technique.</p>
+          </article>
+
+          <article class="card" role="listitem">
+            <div class="card-head">
+              <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+              <h3>Qualité &amp; gouvernance</h3>
+            </div>
+            <p>Great Expectations, tests Python/SQL — Documentation &amp; traçabilité — Monitoring Prometheus/Grafana.</p>
+          </article>
         </div>
-        <p>
-          Python, SQL — Orchestration : Airflow, Kestra, dbt —
-          Ingestion &amp; streaming : Kafka/Redpanda, MinIO.
-        </p>
-      </article>
+      </div>
+    </section>
 
-      <!-- Analyse & modélisation -->
-      <article class="card" role="listitem">
-        <div class="card-head">
-          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></span>
-          <h3>Analyse &amp; modélisation</h3>
-        </div>
-        <p>
-          Statistiques &amp; économétrie : SAS, R, Python —
-          Prévisions, scores, segmentations —
-          Data cleaning &amp; exploration.
-        </p>
-      </article>
-
-      <!-- Visualisation & pilotage -->
-      <article class="card" role="listitem">
-        <div class="card-head">
-          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-chart-bar"></i></span>
-          <h3>Visualisation &amp; pilotage</h3>
-        </div>
-        <p>
-          Power BI, Tableau, Metabase —
-          Kibana pour le suivi produit &amp; technique.
-        </p>
-      </article>
-
-      <!-- Qualité & gouvernance -->
-      <article class="card" role="listitem">
-        <div class="card-head">
-          <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
-          <h3>Qualité &amp; gouvernance</h3>
-        </div>
-        <p>
-          Great Expectations, tests Python/SQL —
-          Documentation &amp; traçabilité — RGPD —
-          Monitoring : Prometheus, Grafana.
-        </p>
-      </article>
-    </div>
-
-    <!-- CTA optionnels (comme dans Valeur) -->
-    <!--
-    <footer class="value-cta">
-      <a href="#projects" class="button outline">Voir mes projets</a>
-      <a href="#contact" class="button primary">Me contacter</a>
-    </footer>
-    -->
-  </div>
-</section>
-
-
-
-    <!-- 🧭 EXPÉRIENCES CLÉS — chronologie -->
+    <!-- =====================================================
+         5) EXPÉRIENCES (chronologie compacte)
+    ====================================================== -->
     <section id="experience" class="wrapper style3 fade-up" aria-labelledby="exp-title">
       <div class="inner">
         <h2 id="exp-title">Expériences clés</h2>
-        <p class="muted">
-          Mon parcours illustre une progression constante : du conseil en business intelligence au rôle de référent data en finance,
-          puis vers des projets analytiques complexes et stratégiques.
-        </p>
+        <p class="muted">Progression constante : de la BI au rôle de référent data en finance, puis vers des projets analytiques complexes.</p>
 
         <article class="box">
           <header>
@@ -403,10 +301,10 @@
             <p><time datetime="2023">2023</time>–<time datetime="2024">2024</time></p>
           </header>
           <ul>
-            <li><strong>Diagnostic &amp; cartographie :</strong> analyse complète de la chaîne de données, détection d’anomalies, fiabilisation.</li>
-            <li><strong>Transformation &amp; consolidation :</strong> nettoyage des flux, recalcul d’indicateurs, règles de calcul cohérentes.</li>
-            <li><strong>Documentation &amp; traçabilité :</strong> méthodes et règles de gestion formalisées pour audits.</li>
-            <li><strong>Restitution :</strong> tableaux de bord Power BI pour suivre la fiabilité et la décision.</li>
+            <li>Diagnostic &amp; cartographie de la chaîne de données, fiabilisation.</li>
+            <li>Nettoyage des flux, recalcul d’indicateurs, règles de calcul cohérentes.</li>
+            <li>Documentation &amp; traçabilité pour audits.</li>
+            <li>Restitution : tableaux de bord Power BI.</li>
           </ul>
         </article>
 
@@ -416,10 +314,10 @@
             <p><time datetime="2022">2022</time>–<time datetime="2023">2023</time></p>
           </header>
           <ul>
-            <li><strong>Dashboards stratégiques :</strong> refonte complète, KPI clairs adoptés par produit &amp; marketing.</li>
-            <li><strong>Bases analytiques :</strong> structuration des logs, clics et segments utilisateurs.</li>
-            <li><strong>Automatisation :</strong> scripts Python/SQL pour analyses récurrentes fiables.</li>
-            <li><strong>Benchmark BI :</strong> évaluation Tableau/Metabase/Superset, recommandations d’évolution.</li>
+            <li>Dashboards stratégiques, KPI clairs adoptés par produit &amp; marketing.</li>
+            <li>Structuration des logs, clics et segments utilisateurs.</li>
+            <li>Automatisation Python/SQL.</li>
+            <li>Benchmark BI (Tableau/Metabase/Superset).</li>
           </ul>
         </article>
 
@@ -430,91 +328,62 @@
           </header>
           <ul>
             <li>Référentiel client unifié — règles de gestion, documentation, validation des flux.</li>
-            <li>Data lake marketing/commerce — conception et validation des cas d’usage analytiques.</li>
-            <li>Pilotage budgétaire — indicateurs stratégiques présentés en comité de direction.</li>
-            <li>Industrialisation SQL/SAS — réduction des erreurs, productivité accrue.</li>
-            <li>Conformité RGPD — contrôles qualité systématisés.</li>
-            <li>Ciblages &amp; segmentations marketing — exclusions réglementaires automatisées.</li>
-          </ul>
-        </article>
-
-        <article class="box">
-          <header>
-            <h3>Consultant BI / AMOA — Anaya (missions CACF &amp; Ministère de l’Économie)</h3>
-            <p><time datetime="2011">2011</time>–<time datetime="2013">2013</time></p>
-          </header>
-          <ul>
-            <li>Scoring crédit — tests fonctionnels, simulation de scores unifiés, analyses de solvabilité.</li>
-            <li>Reporting marketing — automatisation SAS, analyses statistiques.</li>
-            <li>Recette décisionnelle — validation des bases de ciblage CRM.</li>
-            <li>Pilotage public — cadrage et déploiement d’un outil national de suivi.</li>
+            <li>Data lake marketing/commerce — cas d’usage analytiques.</li>
+            <li>Pilotage budgétaire — indicateurs présentés en CODIR.</li>
+            <li>Industrialisation SQL/SAS — conformité RGPD.</li>
           </ul>
         </article>
       </div>
     </section>
 
-    <!-- 🧪 PROJETS PERSONNELS — cartes -->
+    <!-- =====================================================
+         6) PROJETS
+    ====================================================== -->
     <section id="projects" class="wrapper style2" aria-labelledby="projects-title">
       <div class="inner value-inner">
         <header class="value-header">
           <h2 id="projects-title">Projets personnels</h2>
-          <p class="lead">Un aperçu de ma polyvalence : ingestion, modélisation, qualité, visualisation.</p>
+          <p class="lead">Aperçu : ingestion, modélisation, qualité, visualisation.</p>
         </header>
 
         <div class="value-grid" role="list">
-          <!-- Datalyzer -->
           <article class="card" role="listitem">
             <div class="card-head">
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-microscope"></i></span>
-              <h3>Datalyzer — Analyse exploratoire automatisée</h3>
+              <h3>Datalyzer — EDA automatisée</h3>
             </div>
-            <p>
-              Application web pour explorer rapidement les données : contrôles qualité (valeurs manquantes, doublons, outliers),
-              visualisations claires, scoring de fiabilité. Stack : Streamlit → évolutive vers API fa-solidtAPI.
-            </p>
+            <p>Exploration rapide : contrôles qualité (manquants, doublons, outliers), visualisations claires, scoring de fiabilité.</p>
           </article>
 
-          <!-- Reco -->
           <article class="card" role="listitem">
             <div class="card-head">
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-              <h3>Moteur de recommandation — Application ludique</h3>
+              <h3>Moteur de recommandation</h3>
             </div>
-            <p>
-              Collecte automatisée (web scraping), base PostgreSQL, profils utilisateurs,
-              filtrage collaboratif / similarité pour recommandations (ex. mangas) — logique généralisable à d’autres secteurs.
-            </p>
+            <p>Collecte automatisée, PostgreSQL, profils utilisateurs, filtrage collaboratif — généralisable à d’autres domaines.</p>
           </article>
 
-          <!-- Stack open source -->
           <article class="card" role="listitem">
             <div class="card-head">
               <span class="icon-badge" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></span>
-              <h3>Stack data open-source — Orchestration &amp; fiabilité</h3>
+              <h3>Stack data open-source</h3>
             </div>
-            <p>
-              Pipelines automatisés (Airflow, Kestra, dbt), stockage MinIO + PostgreSQL, monitoring Prometheus &amp; Grafana.
-              Objectif : démontrer une stack ouverte, fiable et traçable de bout en bout.
-            </p>
+            <p>Pipelines (Airflow/Kestra/dbt), MinIO + PostgreSQL, monitoring Prometheus &amp; Grafana.</p>
           </article>
         </div>
 
         <footer class="value-cta">
-          <a href="https://github.com/xsorouz" class="button outline" target="_blank" rel="noopener">
-            Voir plus sur GitHub
-          </a>
+          <a href="https://github.com/xsorouz" class="button outline" target="_blank" rel="noopener">Voir plus sur GitHub</a>
         </footer>
       </div>
     </section>
 
-    <!-- 🎓 FORMATION -->
+    <!-- =====================================================
+         7) FORMATION
+    ====================================================== -->
     <section id="education" class="wrapper style3 fade-up" aria-labelledby="edu-title">
       <div class="inner">
         <h2 id="edu-title">Formation</h2>
-        <p class="muted">
-          Un parcours alliant mathématiques, statistiques et data engineering — pour transformer la donnée en décisions fiables et actionnables.
-        </p>
-
         <article class="box">
           <header>
             <h3>Data Engineer — OpenClassrooms</h3>
@@ -525,7 +394,6 @@
             <li>Stockage : PostgreSQL, MongoDB, MinIO.</li>
             <li>Qualité &amp; monitoring : tests, traçabilité, Prometheus/Grafana.</li>
           </ul>
-          <p class="muted">Une spécialisation récente qui complète mon parcours analytique et fait de moi un profil full-stack data.</p>
         </article>
 
         <article class="box">
@@ -546,23 +414,22 @@
           </header>
           <ul>
             <li>Modélisation, probabilités et statistiques.</li>
-            <li>Initiation à l’informatique scientifique.</li>
+            <li>Informatique scientifique.</li>
           </ul>
         </article>
       </div>
     </section>
 
-    <!-- ✉️ CONTACT -->
+    <!-- =====================================================
+         8) CONTACT
+    ====================================================== -->
     <section id="contact" class="wrapper style1 fade-up" aria-labelledby="contact-title">
       <div class="inner">
         <h2 id="contact-title">Contact</h2>
-        <p class="muted">
-          CDI à Brest ou en remote : je transforme les données en indicateurs clairs, modèles utiles et pipelines robustes.
-        </p>
+        <p class="muted">CDI à Brest ou en remote : je transforme les données en indicateurs clairs, modèles utiles et pipelines robustes.</p>
 
         <div class="split style1">
-          <!-- Formulaire (démo — à brancher côté serveur si besoin)
-               Accessibilité : labels reliés via for/id ; inputs avec autocomplete. -->
+          <!-- Formulaire (démo) -->
           <section aria-label="Formulaire de contact">
             <form method="post" action="#">
               <div class="fields">
@@ -588,39 +455,17 @@
           <!-- Coordonnées -->
           <section aria-label="Coordonnées et réseaux">
             <ul class="contact">
-              <li>
-                <h3>Localisation</h3>
-                <span>Brest (FR) — Remote (France)</span>
-              </li>
-              <li>
-                <h3>Email</h3>
-                <a href="mailto:rousseau.pro@outlook.fr">rousseau.pro@outlook.fr</a>
-              </li>
-              <li>
-                <h3>Téléphone</h3>
-                <a href="tel:+33695290505">+33&nbsp;6&nbsp;95&nbsp;29&nbsp;05&nbsp;05</a>
-              </li>
+              <li><h3>Localisation</h3><span>Brest (FR) — Remote (France)</span></li>
+              <li><h3>Email</h3><a href="mailto:rousseau.pro@outlook.fr">rousseau.pro@outlook.fr</a></li>
+              <li><h3>Téléphone</h3><a href="tel:+33695290505">+33&nbsp;6&nbsp;95&nbsp;29&nbsp;05&nbsp;05</a></li>
               <li>
                 <h3>Réseaux</h3>
                 <ul class="icons">
-                  <li>
-                    <a href="https://www.linkedin.com/in/xavierrousseau" target="_blank" rel="noopener" aria-label="LinkedIn">
-                      <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i>
-                      <span class="sr-only">LinkedIn</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/xsorouz" target="_blank" rel="noopener" aria-label="GitHub">
-                      <i class="fa-brands fa-github" aria-hidden="true"></i>
-                      <span class="sr-only">GitHub</span>
-                    </a>
-                  </li>
+                  <li><a href="https://www.linkedin.com/in/xavierrousseau" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i><span class="sr-only">LinkedIn</span></a></li>
+                  <li><a href="https://github.com/xsorouz" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i><span class="sr-only">GitHub</span></a></li>
                 </ul>
               </li>
-              <li>
-                <h3>CV</h3>
-                <a href="assets/docs/CV_Xavier_Rousseau.pdf" target="_blank" rel="noopener">Télécharger le CV</a>
-              </li>
+              <li><h3>CV</h3><a href="assets/docs/CV_Xavier_Rousseau.pdf" target="_blank" rel="noopener">Télécharger le CV</a></li>
             </ul>
           </section>
         </div>
@@ -629,7 +474,7 @@
 
   </main>
 
-  <!-- 🔚 Footer -->
+  <!-- ============== PIED DE PAGE ===================== -->
   <footer id="footer" class="wrapper style1-alt" aria-label="Pied de page">
     <div class="inner">
       <ul class="menu">
@@ -639,27 +484,17 @@
     </div>
   </footer>
 
-  <!-- 📜 Scripts Hyperspace (defer pour ne pas bloquer le rendu)
-       Conseil : si tu n’utilises pas les effets/scroll fournis par le thème, tu peux retirer ces libs. -->
-  <script src="assets/js/jquery.min.js" defer></script>
-  <script src="assets/js/jquery.scrollex.min.js" defer></script>
-  <script src="assets/js/jquery.scrolly.min.js" defer></script>
-  <script src="assets/js/browser.min.js" defer></script>
-  <script src="assets/js/breakpoints.min.js" defer></script>
-  <script src="assets/js/util.js" defer></script>
-  <script src="assets/js/main.js" defer></script>
-
-  <!-- ✨ Surlignage auto du lien de menu correspondant à la section visible
-       - Utilise IntersectionObserver (support large). Pas d’effet si non supporté (fail-safe).
-       - Root margins asymétriques : on considère une section "active" quand son titre est proche du centre de l’écran. -->
+  <!-- ============== SCRIPTS ===================== -->
   <script defer>
+    // Sur-marge d’ancrage pour titres/sections : évite que le titre se cache sous la topbar du navigateur.
+    document.documentElement.style.scrollBehavior = 'smooth';
+  </script>
+  <script defer>
+    // Mise en évidence du lien actif dans la sidebar (IntersectionObserver)
     (function () {
       const links = Array.from(document.querySelectorAll('#sidebar nav a'));
       const map = new Map(links.map(a => [a.getAttribute('href'), a]));
-      const sections = links
-        .map(a => document.querySelector(a.getAttribute('href')))
-        .filter(Boolean);
-
+      const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
       if (!('IntersectionObserver' in window) || sections.length === 0) return;
 
       const onIntersect = entries => {
@@ -670,15 +505,11 @@
           if (entry.isIntersecting) {
             links.forEach(l => { l.classList.remove('active'); l.removeAttribute('aria-current'); });
             link.classList.add('active');
-            link.setAttribute('aria-current', 'true');
+            link.setAttribute('aria-current','true');
           }
         });
       };
-
-      const io = new IntersectionObserver(onIntersect, {
-        rootMargin: '-40% 0px -55% 0px',
-        threshold: [0]
-      });
+      const io = new IntersectionObserver(onIntersect, { rootMargin: '-40% 0px -55% 0px', threshold: [0] });
       sections.forEach(s => io.observe(s));
     })();
   </script>

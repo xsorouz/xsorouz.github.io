@@ -1,736 +1,391 @@
 /* ============================================================================
-   app.css — Xavier Rousseau (VERSION COMMENTÉE)
-   Objectif : feuille unique, lisible, autonome (sans dépendre d’Hyperspace).
-   Principes :
-     - Variables CSS centralisées (tokens) pour la thématique sombre.
-     - Grille fluide → .inner (max-width) + wrappers .style1/2/3.
-     - Classes utilitaires minimalistes (spacing, align, display).
-     - Accessibilité : focus visibles, contrastes, tailles de cibles.
-   ========================================================================== */
+   app.css — version commentée (ajustée)
+   Objectif de ce patch : retrouver une taille perçue proche d’Hyperspace
+   tout en gardant ta DA (sombre, net, micro-accents bleus).
+   CHANGEMENTS MAJEURS :
+     • [A] Échelle de base : font-size du body avec paliers responsive.
+     • [B] Titres & .lead : clamps resserrés (moins haut aux grands écrans).
+     • [C] CTA : taille légèrement réduite pour équilibrer la page.
+============================================================================ */
 
-/* --------------------------------
-   0) RESET LÉGER & BASE
------------------------------------ */
-*,
-*::before,
-*::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; } /* iOS : pas de zoom auto */
-body {
+/* ===== 0) RESET & BASE ===== */
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  /* [A] ÉCHELLE DE BASE — “feeling” Hyperspace (≈15px desktop → 13px mobile) */
+  font-size: 15px;                             /* desktop large */
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
                "Segoe UI Emoji", "Segoe UI Symbol";
-  background: #0f172a; /* --bg */
-  color: rgba(241,245,249,0.90); /* --text */
-  line-height: 1.6;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  background:#0f172a; /* --bg */
+  color: rgba(241,245,249,.92); /* --text */
+  line-height:1.6;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
 }
-img { max-width: 100%; height: auto; display: block; }
-a { color: #60a5fa; text-decoration: none; }
-a:hover { text-decoration: underline; }
-:focus-visible { outline: none; }
+@media (max-width:1680px){ body{ font-size:14.5px; } }
+@media (max-width:1280px){ body{ font-size:14px; } }
+@media (max-width:980px) { body{ font-size:13.5px; } }
+@media (max-width:736px) { body{ font-size:13px; } }
+@media (max-width:480px) { body{ font-size:12.5px; } }
 
-/* --------------------------------
-   1) TOKENS (variables CSS)
------------------------------------ */
+img{ max-width:100%; height:auto; display:block; }
+a{ color:#60a5fa; text-decoration:none; text-decoration-thickness:.06em; text-underline-offset:.18em; }
+a:hover{ text-decoration:underline; }
+
+/* ===== 1) TOKENS ===== */
 :root{
-  /* Couleurs */
-  --bg: #0f172a;                /* bleu nuit */
-  --bg-elev: #111827;           /* surfaces */
-  --panel: #0b1220;             /* panneaux sombres */
-  --muted: rgba(241,245,249,.7);
-  --text: rgba(241,245,249,.92);
-  --text-dim: rgba(241,245,249,.85);
-  --brand: #2563eb;             /* bleu primaire */
-  --brand-2: #06b6d4;           /* cyan secondaire */
-  --accent: #22c55e;            /* vert accent */
-  --danger: #ef4444;            /* rouge */
-  --border: rgba(148,163,184,.25);
+  --bg:#0f172a;
+  --bg-elev:#111827;
+  --panel:#0b1220;
+  --muted:rgba(241,245,249,.7);
+  --text:rgba(241,245,249,.92);
+  --text-dim:rgba(241,245,249,.85);
+  --brand:#2563eb;
+  --brand-2:#06b6d4;
+  --accent:#22c55e;
+  --danger:#ef4444;
+  --border:rgba(148,163,184,.25);
 
-  /* Effets */
-  --shadow-1: 0 6px 24px rgba(0,0,0,.25), 0 2px 8px rgba(0,0,0,.15);
-  --ring: 0 0 0 2px #0b1220, 0 0 0 4px rgba(99,102,241,.5);
-  --focus-ring: 0 0 0 2px #0b1220, 0 0 0 4px rgba(34,211,238,.6);
+  --shadow-1:0 6px 24px rgba(0,0,0,.25),0 2px 8px rgba(0,0,0,.15);
+  --ring:0 0 0 2px #0b1220,0 0 0 4px rgba(99,102,241,.5);
+  --focus-ring:0 0 0 2px #0b1220,0 0 0 4px rgba(34,211,238,.6);
 
-  /* Rythme & typographie */
-  --container: 1120px;
-  --radius: 18px;
-  --radius-lg: 24px;
-  --radius-xl: 28px;
-  --pad: clamp(16px, 2vw, 28px);
-  --gap: clamp(16px, 2.2vw, 28px);
+  --container:1120px;
+  --radius:18px;
+  --radius-lg:24px;
+  --radius-xl:28px;
+  --pad:clamp(16px,2vw,28px);
+  --gap:clamp(16px,2.2vw,28px);
 
-  /* Font sizes (fluid > clamp(min, vw, max)) */
-  --fs-xs: .82rem;
-  --fs-sm: .94rem;
-  --fs-base: 1rem;
-  --fs-lead: clamp(1.02rem, 1.1vw + .9rem, 1.25rem);
-  --fs-h3: clamp(1.06rem, 1vw + 1rem, 1.35rem);
-  --fs-h2: clamp(1.35rem, 1.8vw + 1rem, 1.95rem);
-  --fs-h1: clamp(1.8rem, 4.5vw + .8rem, 3rem);
+  /* [B] Tailles “sages” pour le texte de tête et les titres */
+  --fs-xs:.82rem;
+  --fs-sm:.94rem;
+  --fs-base:1rem;
+  --fs-lead:clamp(0.98rem, 0.9vw + 0.84rem, 1.18rem);
+  --fs-h3:clamp(1.02rem, 1vw + 0.90rem, 1.28rem);
+  --fs-h2:clamp(1.20rem, 1.6vw + 0.90rem, 1.80rem);
+  --fs-h1:clamp(1.70rem, 3.5vw + 0.60rem, 2.60rem);
 
-  /* Distances verticales globales */
-  --section-y: clamp(52px, 8vw, 120px);
+  --section-y:clamp(52px,8vw,120px);
 }
 
-/* --------------------------------
-   2) TYPOGRAPHIE & ÉLÉMENTS
------------------------------------ */
-h1,h2,h3,h4 {
-  color: var(--text);
-  line-height: 1.25;
-  margin: 0 0 .6em 0;
-  font-weight: 800;
-}
-h1 { font-size: var(--fs-h1); letter-spacing: .01em; }
-h2 { font-size: var(--fs-h2); letter-spacing: .01em; }
-h3 { font-size: var(--fs-h3); letter-spacing: .005em; }
-p { margin: 0 0 1.1em; }
-.lead { font-size: var(--fs-lead); color: var(--text-dim); }
-.muted { color: var(--muted); }
+/* ===== 2) TYPO ===== */
+h1,h2,h3,h4{ color:var(--text); line-height:1.25; margin:0 0 .6em; font-weight:800; }
+h1{ font-size:var(--fs-h1); letter-spacing:.01em; }
+h2{ font-size:var(--fs-h2); letter-spacing:.01em; }
+h3{ font-size:var(--fs-h3); letter-spacing:.005em; }
+p{ margin:0 0 1.1em; }
+.lead{ font-size:var(--fs-lead); color:var(--text-dim); }
+.muted{ color:var(--muted); }
 
-ul { padding-left: 1.2em; }
-ul li { margin: .3em 0; }
+/* ===== 3) LAYOUT & WRAPPERS ===== */
+.wrapper{ padding:var(--section-y) var(--pad); }
+.wrapper .inner{ max-width:var(--container); margin:0 auto; }
+#wrapper{ position:relative; }
 
-/* Liens : contraste & soulignement confortable */
-a{
-  text-decoration-thickness: .06em;
-  text-underline-offset: .18em;
-}
-a:focus-visible{
-  box-shadow: var(--focus-ring);
-  border-radius: 8px;
-}
+.wrapper.style1{ background:transparent; }
+.wrapper.style2{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0) 40%), var(--bg); }
+.wrapper.style3{ background:linear-gradient(180deg, rgba(37,99,235,.08), rgba(37,99,235,0) 45%); }
+.wrapper.style1-alt{ background:#0b1220; }
 
-/* --------------------------------
-   3) LAYOUT GLOBAL
------------------------------------ */
-.wrapper{
-  padding: var(--section-y) var(--pad);
-}
-.wrapper .inner{
-  max-width: var(--container);
-  margin: 0 auto;
-}
-#wrapper{ position: relative; }
-
-/* Thèmes de section */
-.wrapper.style1{ background: transparent; }
-.wrapper.style2{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0) 40%), #0f172a; }
-.wrapper.style3{ background: linear-gradient(180deg, rgba(37,99,235,.08), rgba(37,99,235,0) 45%); }
-.wrapper.style1-alt{ background: #0b1220; }
-
-/* --------------------------------
-   4) SIDEBAR (navigation)
------------------------------------ */
+/* ===== 4) SIDEBAR ===== */
 #sidebar{
-  position: fixed;
-  left: 0; top: 0;
-  width: 280px;
-  height: 100vh;
-  background: rgba(2,6,23,.4);
-  backdrop-filter: blur(8px);
-  border-right: 1px solid var(--border);
-  padding: 22px 18px;
-  display: none; /* affiché en >= 1080px */
-  z-index: 50;
+  position:fixed; left:0; top:0; width:280px; height:100vh;
+  background:rgba(2,6,23,.4); backdrop-filter:blur(8px);
+  border-right:1px solid var(--border);
+  padding:22px 18px; display:none; z-index:50;
 }
-#sidebar .inner{ height: 100%; display: flex; align-items: center; }
-#sidebar nav ul{ list-style: none; margin: 0; padding: 0; }
+#sidebar .inner{ height:100%; display:flex; align-items:center; }
+#sidebar nav ul{ list-style:none; margin:0; padding:0; }
 #sidebar nav a{
-  display: block;
-  padding: .55rem 0;
-  color: var(--text);
-  font-weight: 600;
-  letter-spacing: .01em;
-  opacity: .9;
+  display:block; padding:.55rem 0; color:var(--text); font-weight:600; letter-spacing:.01em; opacity:.9;
 }
-#sidebar nav a:hover{ opacity: 1; }
-#sidebar nav a.active,
-#sidebar nav a[aria-current="true"]{
-  color: #e5edff;
-  text-decoration: none;
-  position: relative;
+#sidebar nav a:hover{ opacity:1; }
+#sidebar nav a.active,#sidebar nav a[aria-current="true"]{
+  color:#e5edff; text-decoration:none; position:relative;
 }
 #sidebar nav a.active::after{
-  content: "";
-  position: absolute;
-  right: -12px; top: 50%;
-  transform: translateY(-50%);
-  width: 6px; height: 6px; border-radius: 999px;
-  background: linear-gradient(135deg, var(--brand), var(--brand-2));
-  box-shadow: 0 0 0 6px rgba(59,130,246,.18);
+  content:""; position:absolute; right:-12px; top:50%; transform:translateY(-50%);
+  width:6px; height:6px; border-radius:999px;
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  box-shadow:0 0 0 6px rgba(59,130,246,.18);
+}
+@media (min-width:1080px){
+  #sidebar{ display:block; }
+  #wrapper,#footer{ margin-left:280px; }
 }
 
-/* Compense la sidebar sur desktop */
-@media (min-width: 1080px){
-  #sidebar{ display: block; }
-  #wrapper, #footer{ margin-left: 280px; }
-}
-
-/* --------------------------------
-   5) HERO / INTRO
------------------------------------ */
-.hero{ position: relative; }
-.fullscreen{
-  min-height: 100svh; /* mobile safe viewport */
-  display: grid;
-  place-items: center;
-}
+/* ===== 5) HERO ===== */
+.hero{ position:relative; }
+.fullscreen{ min-height:100svh; display:grid; place-items:center; }
 .hero-inner{
-  display: grid;
-  grid-template-columns: 1.1fr .9fr;
-  align-items: center;
-  gap: clamp(28px, 4vw, 48px);
+  display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:clamp(28px,4vw,48px);
 }
-.hero-col--text{ display: grid; gap: 1rem; }
-.hero-title{ font-size: var(--fs-h1); }
-.hero-role{ font-weight: 700; opacity: .95; }
-.hero-value{ font-size: var(--fs-lead); opacity: .95; }
-.hl{ color: #e0eaff; text-shadow: 0 0 18px rgba(59,130,246,.25); }
+.hero-col--text{ display:grid; gap:1rem; }
+.hero-title{ font-size:var(--fs-h1); }
+.hero-role{ font-weight:700; opacity:.95; }
+.hero-value{ font-size:var(--fs-lead); opacity:.95; }
+.hl{ color:#e0eaff; text-shadow:0 0 18px rgba(59,130,246,.25); }
 
-.hero-status{
-  display: flex; gap: .9rem 1.2rem; flex-wrap: wrap;
-  margin: .4rem 0 .2rem;
-  list-style: none; padding: 0;
-  color: var(--muted);
-}
-.status-ico{ margin-right: .4rem; }
+.hero-status{ display:flex; gap:.9rem 1.2rem; flex-wrap:wrap; margin:.4rem 0 .2rem; list-style:none; padding:0; color:var(--muted); }
+.status-ico{ margin-right:.4rem; }
 
-.hero-bullets{
-  list-style: none; padding: 0;
-  display: grid; gap: .9rem;
-  margin: .4rem 0 0;
-}
+.hero-bullets{ list-style:none; padding:0; display:grid; gap:.9rem; margin:.4rem 0 0; }
+.hero-actions{ display:flex; gap:.75rem; flex-wrap:wrap; margin-top:.4rem; }
 
-.hero-actions{ display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .4rem; }
-
-/* Visuel */
-.hero-col--visual{
-  position: relative;
-  display: grid;
-  place-items: center;
-}
+.hero-col--visual{ position:relative; display:grid; place-items:center; }
 .portrait{
-  width: min(420px, 90%);
-  aspect-ratio: 1;
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: var(--shadow-1);
-  background: #0b1220;
-  border: 1px solid var(--border);
+  width:min(420px,90%); aspect-ratio:1; border-radius:28px; overflow:hidden;
+  box-shadow:var(--shadow-1); background:#0b1220; border:1px solid var(--border);
 }
-.portrait img{ width: 100%; height: 100%; object-fit: cover; }
+.portrait img{ width:100%; height:100%; object-fit:cover; }
 .hero-blob{
-  position: absolute; inset: -8%;
-  z-index: -1;
-  background: radial-gradient(40% 40% at 50% 50%, rgba(37,99,235,.35), rgba(6,182,212,.08) 60%, transparent 70%);
-  filter: blur(28px);
+  position:absolute; inset:-8%; z-index:-1;
+  background:radial-gradient(40% 40% at 50% 50%, rgba(37,99,235,.35), rgba(6,182,212,.08) 60%, transparent 70%);
+  filter:blur(28px);
+}
+@media (max-width:1100px){
+  .hero-inner{ grid-template-columns:1fr; }
+  .hero-col--visual{ order:-1; }
 }
 
-/* Responsive hero */
-@media (max-width: 1100px){
-  .hero-inner{ grid-template-columns: 1fr; }
-  .hero-col--visual{ order: -1; }
+/* ===== 6) BOUTONS ===== */
+.button,button,input[type="submit"],input[type="reset"],input[type="button"]{
+  -webkit-appearance:none; appearance:none;
+  display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
+  min-height:50px; padding:0 1.15rem; border-radius:14px;
+  border:1px solid var(--border); background:#0b1220; color:var(--text);
+  font-weight:700; letter-spacing:.01em; cursor:pointer;
+  transition:transform .06s ease, filter .2s ease, background .2s ease, border-color .2s ease;
+}
+/* [C] CTA un cran plus sobre */
+.button:hover{ transform:translateY(-1px); }
+.button:active{ transform:translateY(0); }
+.button:focus-visible{ box-shadow:var(--focus-ring); }
+.button.primary{ border:0; background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#fff; filter:saturate(1.05) contrast(1.05); }
+.button.primary:hover{ filter:saturate(1.1) contrast(1.1) brightness(1.05); }
+.button.outline{ background:transparent; border-color:rgba(96,165,250,.6); color:#dbeafe; }
+.button.ghost{ background:rgba(255,255,255,.06); color:#e5edff; }
+.cta-lg{ font-size:clamp(0.95rem, 1vw, 1.05rem); }
+
+/* ===== 7) SPOTLIGHTS — À PROPOS =====
+   Pattern Hyperspace : .spotlights > section avec .image + .content
+   - Image à gauche : largeur fixe fluide
+   - Texte : largeur max lisible (~74ch)
+   - Mobile : empilement image puis texte
+*/
+.spotlights.about > section{
+  display:flex; align-items:stretch;
+  min-height:clamp(380px,56vh,680px);
+  padding:0; background:none; border:0; box-shadow:none; border-radius:0;
+  gap:clamp(24px,3vw,40px);
+}
+.spotlights.about > section > .image{
+  flex:0 0 clamp(280px, 30vw, 420px);
+  position:relative; overflow:hidden;
+  border-radius:var(--radius-lg);
+  border:1px solid var(--border);
+  box-shadow:var(--shadow-1);
+}
+.spotlights.about > section > .image img{
+  width:100%; height:100%;
+  object-fit:cover; /* Remplit la colonne image */
+  /* Le cadrage se règle dans l’HTML via style="object-position: center 35%" */
+}
+.spotlights.about > section > .content{
+  flex:1; display:flex; align-items:center; padding:clamp(28px,4vw,56px) 0;
+}
+.spotlights.about > section > .content > .inner{
+  max-width:74ch; /* un peu plus large que Hyperspace */
+  line-height:1.72;
+}
+@media (max-width:980px){
+  .spotlights.about > section{ display:block; min-height:0; }
+  .spotlights.about > section > .image{
+    width:100%;
+    height:clamp(220px,42vh,380px);
+    margin:0 0 clamp(18px,3vw,28px) 0;
+  }
+  .spotlights.about > section > .content{ padding:0; }
 }
 
-/* --------------------------------
-   6) BOUTONS (CTA)
------------------------------------ */
-.button,
-button,
-input[type="submit"], input[type="reset"], input[type="button"]{
-  -webkit-appearance: none; appearance: none;
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: .6rem;
-  height: 46px;
-  min-height: 50px;
-  padding: 0 1.15rem;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: #0b1220;
-  color: var(--text);
-  font-weight: 700;
-  letter-spacing: .01em;
-  cursor: pointer;
-  transition: transform .06s ease, filter .2s ease, background .2s ease, border-color .2s ease;
-}
-.button:hover{ transform: translateY(-1px); }
-.button:active{ transform: translateY(0); }
-.button:focus-visible{ box-shadow: var(--focus-ring); }
-
-.button.primary{
-  border: 0;
-  background: linear-gradient(135deg, var(--brand), var(--brand-2));
-  color: white;
-  filter: saturate(1.05) contrast(1.05);
-}
-.button.primary:hover{ filter: saturate(1.1) contrast(1.1) brightness(1.05); }
-
-.button.outline{
-  background: transparent;
-  border-color: rgba(96,165,250,.6);
-  color: #dbeafe;
-}
-.button.ghost{
-  background: rgba(255,255,255,.06);
-  color: #e5edff;
-}
-
-/* CTA larges (héros) */
-.cta-lg{ font-size: clamp(1rem, 1.2vw, 1.05rem); }
-
-/* --------------------------------
-   7) SPOTLIGHTS (image + texte)
------------------------------------ */
-.spotlights > section{
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: clamp(20px, 3.2vw, 40px);
-  align-items: center;
-  padding: var(--pad);
-  background: rgba(255,255,255,.02);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-1);
-}
-.spotlights > section + section{ margin-top: var(--gap); }
-
-.spotlights .image{
-  display: block;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.spotlights .image img{
-  width: 100%; height: auto; object-fit: cover;
-}
-
-.spotlights .content{
-  background: transparent;
-}
-.spotlights .content .inner{
-  padding: min(1.2rem, 3vw) 0;
-}
-#one .content .inner p{
-  text-align: left;            /* moins compact que justify */
-  hyphens: manual;
-  line-height: 1.72;
-}
-
-@media (max-width: 980px){
-  .spotlights > section{ grid-template-columns: 1fr; }
-}
-
-/* --------------------------------
-   8) CARTES « VALEUR » & GRILLES
------------------------------------ */
-.value-inner{ max-width: var(--container); margin: 0 auto; }
-.value-header{ text-align: left; margin-bottom: 1.3rem; }
-.value-grid{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap);
-}
+/* ===== 8) CARTES / GRILLES ===== */
+.value-inner{ max-width:var(--container); margin:0 auto; }
+.value-header{ text-align:left; margin-bottom:1.3rem; }
+.value-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--gap); }
 .card{
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: calc(var(--pad) * .9);
-  box-shadow: var(--shadow-1);
-  transition: transform .12s ease, box-shadow .2s ease;
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:calc(var(--pad) * .9); box-shadow:var(--shadow-1);
+  transition:transform .12s ease, box-shadow .2s ease;
 }
-.card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(37,99,235,.15), 0 4px 12px rgba(0,0,0,.25);
-}
-.card-head{
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: .8rem;
-  margin-bottom: .6rem;
-}
+.card:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(37,99,235,.15), 0 4px 12px rgba(0,0,0,.25); }
+.card-head{ display:grid; grid-template-columns:auto 1fr; align-items:center; gap:.8rem; margin-bottom:.6rem; }
 .icon-badge{
-  width: 42px; height: 42px; border-radius: 12px;
-  display: grid; place-items: center;
-  background: radial-gradient(60% 60% at 30% 20%, rgba(59,130,246,.45), rgba(59,130,246,.15));
-  border: 1px solid rgba(96,165,250,.35);
-  color: #e5edff;
+  width:42px; height:42px; border-radius:12px; display:grid; place-items:center;
+  background:radial-gradient(60% 60% at 30% 20%, rgba(59,130,246,.45), rgba(59,130,246,.15));
+  border:1px solid rgba(96,165,250,.35); color:#e5edff;
 }
+#value .card h3{ font-size:1.2rem; letter-spacing:.005em; }
+#value .card p{ color:var(--muted); }
+.value-cta{ margin-top:var(--gap); display:flex; gap:.75rem; flex-wrap:wrap; }
 
-#value .card h3{ font-size: 1.2rem; letter-spacing: .005em; }
-#value .card p{ color: var(--muted); }
+@media (max-width:1080px){ .value-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:680px){ .value-grid{ grid-template-columns:1fr; } }
 
-.value-cta{
-  margin-top: var(--gap);
-  display: flex; gap: .75rem; flex-wrap: wrap;
-}
-
-@media (max-width: 1080px){
-  .value-grid{ grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 680px){
-  .value-grid{ grid-template-columns: 1fr; }
-}
-
-/* --------------------------------
-   9) FEATURES (icônes + texte) — section Compétences
------------------------------------ */
-.features{
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--gap);
-  margin-top: .6rem;
-}
-.features section{
-  background: rgba(255,255,255,.03);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: calc(var(--pad) * .9);
-}
-.features h3{ margin-bottom: .4rem; }
-.features p{ color: var(--muted); }
-
-/* Harmonise les icônes FA « major » si utilisées */
-/* Icônes “major” (skills) */
-.icon.major{
-  font-size: 1.35rem;
-  width: 46px; height: 46px; border-radius: 12px;
-  display: inline-grid; place-items: center;
-  background: rgba(37,99,235,.18);
-  color: #dbeafe;
-  border: 1px solid rgba(96,165,250,.35);
-  margin-right: .6rem;
-}
-.icon.major i{
-  display: inline-block;
-  line-height: 1;
-  font-size: 1.15rem; /* ajuste si tu veux plus gros */
-}
-
-@media (max-width: 860px){
-  .features{ grid-template-columns: 1fr; }
-}
-
-/* --------------------------------
-   10) BOXES (expériences, diplômes)
------------------------------------ */
+/* ===== 9) BOXES ===== */
 .box{
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: calc(var(--pad) * .95);
-  box-shadow: var(--shadow-1);
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:calc(var(--pad) * .95); box-shadow:var(--shadow-1);
 }
-.box + .box{ margin-top: var(--gap); }
-.box header h3{ margin: 0 0 .25rem; }
-.box header p{ margin: 0 0 .6rem; color: var(--muted); }
+.box + .box{ margin-top:var(--gap); }
+.box header h3{ margin:0 0 .25rem; }
+.box header p{ margin:0 0 .6rem; color:var(--muted); }
 
-/* --------------------------------
-   11) LISTES D’ICÔNES & CONTACT
------------------------------------ */
-.icons{ display: flex; gap: .6rem; padding: 0; list-style: none; }
-.icons .icon{ width: 42px; height: 42px; display: grid; place-items: center; }
-.icons .icon:hover{ transform: translateY(-1px); }
+/* ===== 10) CONTACT ===== */
+.fields{ display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+.field{ display:grid; gap:.4rem; }
+.field.half{ grid-column:span 1; }
+@media (max-width:720px){
+  .fields{ grid-template-columns:1fr; }
+  .field.half{ grid-column:span 1; }
+}
+label{ font-weight:600; color:var(--text-dim); }
+input[type="text"],input[type="email"],textarea{
+  width:100%; border-radius:12px; border:1px solid var(--border);
+  background:rgba(255,255,255,.03); color:var(--text); padding:.9rem 1rem;
+  transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+}
+textarea{ resize:vertical; min-height:140px; }
+input:focus-visible,textarea:focus-visible{
+  border-color:rgba(96,165,250,.8); box-shadow:var(--focus-ring); background:rgba(255,255,255,.05);
+}
+.actions{ list-style:none; padding:0; margin:.6rem 0 0; display:flex; gap:.75rem; }
+.actions li{ margin:0; }
 
-.contact{ list-style: none; padding: 0; margin: 0; }
-.contact > li + li{ margin-top: .8rem; }
-.contact h3{ margin: 0 0 .2rem; font-size: 1rem; }
-.contact a{ word-break: break-word; }
+.icons{ list-style:none; padding:0; margin:0; display:flex; gap:.6rem; }
+.icons a{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:42px; height:42px; border-radius:12px;
+  background:rgba(37,99,235,.18); border:1px solid rgba(96,165,250,.35); color:#dbeafe;
+  text-decoration:none;
+}
+.icons a:hover{ transform:translateY(-1px); }
+.sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-/* --------------------------------
-   12) FORMULAIRES
------------------------------------ */
-.fields{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .9rem;
-}
-.field{ display: grid; gap: .4rem; }
-.field.half{ grid-column: span 1; }
-@media (max-width: 720px){
-  .fields{ grid-template-columns: 1fr; }
-  .field.half{ grid-column: span 1; }
-}
+/* ===== 11) TABLES (optionnel) ===== */
+table{ width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+thead th{ text-align:left; padding:.8rem 1rem; background:rgba(59,130,246,.15); }
+tbody td{ padding:.75rem 1rem; border-top:1px solid var(--border); }
 
-label{ font-weight: 600; color: var(--text-dim); }
-input[type="text"],
-input[type="email"],
-textarea{
-  width: 100%;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.03);
-  color: var(--text);
-  padding: .9rem 1rem;
-  transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
-}
-textarea{ resize: vertical; min-height: 140px; }
-input:focus-visible,
-textarea:focus-visible{
-  border-color: rgba(96,165,250,.8);
-  box-shadow: var(--focus-ring);
-  background: rgba(255,255,255,.05);
-}
+/* ===== 12) FOOTER ===== */
+#footer{ padding:calc(var(--section-y) * .8) var(--pad); }
+#footer .inner{ max-width:var(--container); margin:0 auto; display:flex; justify-content:center; align-items:center; }
+#footer .menu{ list-style:none; padding:0; margin:0; display:flex; gap:.9rem; flex-wrap:wrap; color:var(--muted); }
+#footer .menu a{ color:#c7d2fe; }
 
-/* --------------------------------
-   13) TABLES (si tu en ajoutes plus tard)
------------------------------------ */
-table{
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-thead th{
-  text-align: left;
-  padding: .8rem 1rem;
-  background: rgba(59,130,246,.15);
-}
-tbody td{
-  padding: .75rem 1rem;
-  border-top: 1px solid var(--border);
+/* ===== 13) UTILITAIRES ===== */
+.text-center{ text-align:center; }
+.mt-0{ margin-top:0; } .mb-0{ margin-bottom:0; }
+.mt-1{ margin-top:.5rem; } .mb-1{ margin-bottom:.5rem; }
+.mt-2{ margin-top:1rem; } .mb-2{ margin-bottom:1rem; }
+
+/* ===== 14) ANIMATIONS ===== */
+.fade-up{ opacity:0; transform:translateY(8px); animation:fadeUp .7s ease forwards; }
+@keyframes fadeUp{ to{ opacity:1; transform:translateY(0); } }
+@media (prefers-reduced-motion:reduce){
+  .fade-up{ animation:none; opacity:1; transform:none; }
+  *{ scroll-behavior:auto !important; }
 }
 
-/* --------------------------------
-   14) FOOTER
------------------------------------ */
-#footer{ padding: calc(var(--section-y) * .8) var(--pad); }
-#footer .inner{
-  max-width: var(--container);
-  margin: 0 auto;
-  display: flex; justify-content: center; align-items: center;
+/* ===== 15) ACCESSIBILITÉ ===== */
+.skip-link{
+  position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
 }
-#footer .menu{
-  list-style: none; padding: 0; margin: 0;
-  display: flex; gap: .9rem; flex-wrap: wrap;
-  color: var(--muted);
-}
-#footer .menu a{ color: #c7d2fe; }
-
-/* --------------------------------
-   15) UTILITAIRES
------------------------------------ */
-.text-center{ text-align: center; }
-.mt-0{ margin-top: 0; }
-.mb-0{ margin-bottom: 0; }
-.mt-1{ margin-top: .5rem; }
-.mb-1{ margin-bottom: .5rem; }
-.mt-2{ margin-top: 1rem; }
-.mb-2{ margin-bottom: 1rem; }
-
-/* --------------------------------
-   16) ANIMATIONS & EFFETS D’APPARITION
------------------------------------ */
-.fade-up{
-  opacity: 0;
-  transform: translateY(8px);
-  animation: fadeUp .7s ease forwards;
-}
-@keyframes fadeUp{
-  to{ opacity: 1; transform: translateY(0); }
-}
-
-/* --------------------------------
-   17) ACCESSIBILITÉ & FOCUS
------------------------------------ */
 .skip-link:focus{
-  position: static !important;
-  width: auto !important; height: auto !important;
-  clip: auto !important;
-  padding: .5rem .75rem;
-  background: #111827;
-  color: #fff;
-  border-radius: 8px;
-  box-shadow: var(--focus-ring);
+  position:fixed; left:12px; top:12px; width:auto; height:auto; clip:auto;
+  padding:.5rem .75rem; background:#111827; color:#fff; border-radius:8px; box-shadow:var(--focus-ring); z-index:99;
 }
+/* Ancrage confortable pour tout élément porteur d’un id */
+:is(section,h1,h2,h3,h4)[id]{ scroll-margin-top: clamp(64px, 10vh, 120px); }
 
-/* --------------------------------
-   18) CORRECTIONS FINES RESPONSIVE
------------------------------------ */
-@media (max-width: 1240px){
-  :root{ --container: 1060px; }
-}
-@media (max-width: 1120px){
-  :root{ --container: 980px; }
-}
-@media (max-width: 980px){
-  :root{ --container: 900px; }
-}
-@media (max-width: 860px){
-  :root{ --container: 760px; }
-}
-@media (max-width: 720px){
-  :root{ --container: 640px; }
-}
+/* ===== 16) RESPONSIVE FIN ===== */
+@media (max-width:1240px){ :root{ --container:1060px; } }
+@media (max-width:1120px){ :root{ --container:980px; } }
+@media (max-width:980px){ :root{ --container:900px; } }
+@media (max-width:860px){ :root{ --container:760px; } }
+@media (max-width:720px){ :root{ --container:640px; } }
 
-/* ==== PATCH PAGE CONTACT ==== */
-
-/* 1) Bouton "Envoyer" : retirer la puce de la liste + aligner horizontalement */
-.actions{
-  list-style: none;
-  padding: 0;
-  margin: .6rem 0 0;
-  display: flex;
-  gap: .75rem;
-}
-.actions li{ margin: 0; }
-
-/* 2) Icônes réseaux (version Font Awesome) */
-ul.icons{ list-style: none; padding: 0; margin: 0; display: flex; gap: .6rem; }
-ul.icons li{ margin: 0; }
-ul.icons a{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px; height: 42px;
-  border-radius: 12px;
-  background: rgba(37,99,235,.18);
-  border: 1px solid rgba(96,165,250,.35);
-  color: #dbeafe;
-  text-decoration: none;
-}
-ul.icons a:hover{ transform: translateY(-1px); }
-ul.icons a i{ font-size: 1.1rem; line-height: 1; }
-
-/* Accessibilité (texte invisible visuellement mais lisible par SR) */
-.sr-only{
-  position: absolute !important;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-}
-
-/* 3) Grille du bloc contact : formulaire / coordonnées */
-.split.style1{
+/* ===================== CONTACT — Layout 2 colonnes ===================== */
+/* Met la grille 2 colonnes (formulaire + coordonnées) et aligne en haut. */
+#contact .split{
   display: grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap: var(--gap);
+  grid-template-columns: 1.1fr 0.9fr;        /* form un peu plus large */
+  gap: clamp(20px, 3vw, 40px);
+  align-items: start;                         /* top align, pas centré */
+}
+#contact .split > section{ min-width: 0; }    /* évite qu’un input trop long pousse la colonne */
+
+/* Empilement mobile propre */
+@media (max-width: 980px){
+  #contact .split{ grid-template-columns: 1fr; }
+}
+
+/* ====================== CONTACT — Mise en page solide ====================== */
+/* 1) Deux colonnes : on borne la largeur du formulaire pour qu'il n'étouffe pas
+      la colonne "Coordonnées". On utilise minmax(0, …) pour éviter tout overflow. */
+#contact .split{
+  --contact-form-max: 720px;                  /* ajuste 660–760 selon goût */
+  display: grid;
+  grid-template-columns: minmax(0, var(--contact-form-max)) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 40px);
   align-items: start;
 }
-@media (max-width: 860px){
-  .split.style1{ grid-template-columns: 1fr; }
-}
+#contact .split > section{ min-width: 0; }    /* indispensable en grid */
 
-/* Harmoniser l'entête de la section compétences avec les autres */
-#skills-section .inner > h2{ margin-bottom: .4rem; }
-#skills-section .inner > p.muted{ margin-top: 0; margin-bottom: 1.1rem; }
- 
-/* ==== À PROPOS : layout, taille image, justification ==== */
-
-/* Colonnes : texte large à gauche, image bornée à droite */
-.spotlights.about > section{
+/* 2) Grille interne du formulaire, compacte et sans débordement */
+#contact .fields{
   display: grid;
-  grid-template-columns: minmax(56ch, 1fr) minmax(280px, 380px);
-  grid-template-areas: "content image";
-  align-items: center;
-  gap: clamp(20px, 3.2vw, 44px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(14px, 1.8vw, 18px);
+  row-gap: clamp(12px, 1.4vw, 16px);
 }
+#contact .field{ min-width: 0; }
+#contact .field:nth-child(3){ grid-column: 1 / -1; } /* "Message" sur 2 colonnes */
 
-/* Zones */
-.spotlights.about .content{ grid-area: content; }
-.spotlights.about .image{
-  grid-area: image;
-  max-width: 380px;            /* borne dure pour éviter une image trop grande */
-  justify-self: end;           /* colle l'image à droite */
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  aspect-ratio: 4 / 5;         /* réserve d'espace (CLS=0) */
-  background: rgba(255,255,255,.02);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-1);
+/* 3) Champs un peu moins hauts + coins sages */
+#contact input[type="text"],
+#contact input[type="email"],
+#contact textarea{
+  padding: .7rem .9rem;                        /* avant : .75–.9rem */
+  border-radius: 10px;                         /* avant : 12px */
+  line-height: 1.35;
 }
-.spotlights.about .image picture,
-.spotlights.about .image img{
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;           /* recadrage propre */
-}
+#contact textarea{ min-height: 110px; resize: vertical; }
 
-/* Paragraphe justifié (spécificité > #one .content .inner p) */
-#one.spotlights.about .content .inner p{
-  text-align: justify;
-  text-justify: inter-word;
-  hyphens: auto;
-  line-height: 1.72;           /* on garde ton rythme vertical */
-}
+/* 4) Actions : bouton qui ne “flotte” pas trop */
+#contact .actions{ margin-top: .5rem; gap: .6rem; }
+#contact .actions .button{ padding-inline: .95rem; }
 
-/* Empilement mobile : texte puis image, image pleine largeur de sa colonne */
+/* 5) Colonne "Coordonnées" : titres moins massifs pour gagner de la place */
+#contact .contact h3{
+  font-size: 1.05rem;                          /* avant bien plus grand */
+  margin: 0 0 .35rem;
+}
+#contact .contact li{ margin-bottom: .85rem; }
+#contact .icons a{ width: 38px; height: 38px; border-radius: 10px; }
+
+/* 6) Palier responsive : on garde les 2 colonnes un peu plus longtemps
+      puis on empile proprement sous 980 px. */
+@media (max-width: 1180px){
+  #contact .split{
+    --contact-form-max: 640px;
+    gap: 24px;
+  }
+}
 @media (max-width: 980px){
-  .spotlights.about > section{
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "content"
-      "image";
-  }
-  .spotlights.about .image{
-    max-width: none;           /* plus de borne en mobile */
-    justify-self: stretch;
-  }
-}
-/* ==== À PROPOS : layout, image bornée, texte justifié ==== */
-
-/* Colonnes : texte large à gauche, image bornée à droite */
-.spotlights.about > section{
-  display: grid;
-  grid-template-columns: minmax(56ch, 1fr) minmax(280px, 380px);
-  grid-template-areas: "content image";
-  align-items: center;
-  gap: clamp(20px, 3.2vw, 44px);
-}
-
-/* Zones */
-.spotlights.about .content{ grid-area: content; }
-.spotlights.about .image{
-  grid-area: image;
-  max-width: 380px;        /* borne image */
-  justify-self: end;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  aspect-ratio: 4 / 5;     /* 800×1000 → réserve d’espace (CLS=0) */
-  background: rgba(255,255,255,.02);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-1);
-}
-.spotlights.about .image img{
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-/* Justification (sur le conteneur + hyphens sur <p>) */
-#one.spotlights.about .content .inner{
-  text-align: justify;
-  text-justify: inter-word;
-}
-#one.spotlights.about .content .inner p{
-  hyphens: auto;
-  line-height: 1.72;
-}
-
-/* Empilement mobile */
-@media (max-width: 980px){
-  .spotlights.about > section{
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "content"
-      "image";
-  }
-  .spotlights.about .image{
-    max-width: none;
-    justify-self: stretch;
-  }
-}
-/* Fallback visuel si l'image n'est pas (encore) chargée */
-.spotlights.about .image{
-  background-image:
-    radial-gradient(120% 80% at 100% 0%, rgba(59,130,246,.15), transparent 60%),
-    radial-gradient(80% 60% at 0% 100%, rgba(6,182,212,.10), transparent 50%);
-  background-size: cover;
-  background-position: center;
+  #contact .split{ grid-template-columns: 1fr; }
+  #contact .fields{ grid-template-columns: 1fr; }
+  #contact .field:nth-child(3){ grid-column: auto; } /* message = 1 colonne */
 }
